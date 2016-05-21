@@ -1,41 +1,89 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// Copyright (c) 2016 The ArMingMo Authors. All rights reserved.
 
-// Simple extension to replace lolcat images from
-// http://icanhascheezburger.com/ with loldog images instead.
+var msgToPopup = [];
+msgToPopup[0] = {};
+// tabId, 
+// msgToPopup.forEach(function(tabMsg) {if(tabMsg.tabId == xxx) {console.log('hi',tabMsg.tabId)}})
 
-// chrome.webRequest.onBeforeRequest.addListener(
-//   function(info) {
-//     console.log("Cat intercepted: " + info.url);
-//     // Redirect the lolcal request to a random loldog URL.
-//     var i = Math.round(Math.random() * loldogs.length);
-//     return {redirectUrl: loldogs[i]};
-//   },
-//   // filters
-//   {
-//     urls: [
-//       "https://i.chzbgr.com/*"
-//     ],
-//     types: ["image"]
-//   },
-//   // extraInfoSpec
-//   ["blocking"]);
-//var a;
-var JSONObj;
+var serverInfo;
+var tabSwitcher = 0;
+
+var getCurrentTabId = function (callback) {
+  var queryInfo = {
+    active: true,
+    currentWindow: true
+  };
+  chrome.tabs.query(queryInfo, function(tabs) {
+    var tab = tabs[0];
+    var tabId = tab.id;
+    callback(tabId);
+  });
+}
+getCurrentTabId(function(id){
+  msgToPopup[tabSwitcher].tabId = id;
+  console.log('tabId:',id);
+})
+
+var getTabIdandSwitch = function() {
+  getCurrentTabId(function(id){
+    console.log('tabId: '+id);
+    var a = msgToPopup.findIndex(function(d) { return d.tabId == id});
+    console.log('a = ', a);
+    if ( a != -1) {
+      tabSwitcher = a;
+    } else {
+      tabSwitcher = msgToPopup.length;
+      console.log('tabSwitcher:',tabSwitcher);
+      msgToPopup[tabSwitcher] = {};
+      msgToPopup[tabSwitcher].tabId = id;
+    }
+  })
+}
+
+chrome.tabs.onActiveChanged.addListener(getTabIdandSwitch)
+
 chrome.webRequest.onBeforeRequest.addListener(
-    function(details)
-    {
-        console.log(details.requestBody);
-        
-        var buf = details.requestBody.raw[0].bytes;
-        var buf2Int8 = new Int8Array(buf);
-        var resultString = "";
-        for(i=0;i<buf2Int8.length;i++){resultString+= String.fromCharCode(buf2Int8[i]);}
-        console.log(resultString);
-        JSONObj = JSON.parse(resultString);
-        if(JSONObj.sid) { console.log(JSONObj.sid);}
-    },  
-    {urls: ["http://*.icantw.com/*"]},
-    ['requestBody']
+  function(details)
+  {
+    if((details.method) && details.method == 'POST') {
+      var buf = details.requestBody.raw[0].bytes;
+      var buf2Int8 = new Int8Array(buf);
+      var resultString = "";
+      for(i=0;i<buf2Int8.length;i++){resultString+= String.fromCharCode(buf2Int8[i]);}
+      JSONObj = JSON.parse(resultString);
+      console.log(JSON.stringify(JSONObj));
+      if(JSONObj.sid) { 
+        msgToPopup[tabSwitcher].sid = JSONObj.sid;
+        msgToPopup[tabSwitcher].url = details.url;
+      }  
+    }
+  },  
+  {urls: ["http://*.icantw.com/*"]},
+  ['requestBody']
 );
+
+chrome.extension.onConnect.addListener(function(port) {
+  console.log("Connected .....");
+  port.onMessage.addListener(function(msg) {
+        console.log("message recieved "+ msg);
+        port.postMessage(JSON.stringify(msgToPopup[tabSwitcher]));
+  });
+});
+
+var httpPostString = function(stringContent) {
+  var httpRequest = new XMLHttpRequest();
+  httpRequest.open("POST",msgToPopup[tabSwitcher].url,true);
+  httpRequest.setRequestHeader("Accept","*/*");
+  httpRequest.setRequestHeader("Accept-Language","zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4,zh-CN;q=0.2");
+  httpRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+  httpRequest.setRequestHeader("X-Requested-With","ShockwaveFlash/21.0.0.216");
+  httpRequest.send(stringContent);
+
+  httpRequest.onreadystatechange=function() {
+    if (httpRequest.readyState==4 && httpRequest.status==200) {
+        serverInfo = JSON.parse(httpRequest.responseText);
+    }
+  }
+}
+
+

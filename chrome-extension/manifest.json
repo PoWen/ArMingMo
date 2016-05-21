@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "Getting started ArMingMo",
+  "name": "夜就輕輕地來了, 開始阿明謀",
   "description": "This extension supports for playing King",
   "version": "0.0.1",
 
@@ -14,12 +14,12 @@
   },
   "permissions": [
     "activeTab",
-    "*://wg.pubgame.tw/*",
     "*://*.icantw.com/*",
     "cookies",
     "webRequest",
     "webRequestBlocking",
     "notifications", 
-    "tabs" 
+    "tabs",
+    "storage"
   ]
 }
