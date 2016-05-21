@@ -45,3 +45,11 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Chrome extension package
+.crx
+.pem
+
+# sublime workspace
+.sublime-project
+.sublime-workspace
