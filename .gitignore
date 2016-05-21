@@ -47,9 +47,9 @@ Temporary Items
 .apdisk
 
 # Chrome extension package
-.crx
-.pem
+*.crx
+*.pem
 
 # sublime workspace
-.sublime-project
-.sublime-workspace
+*.sublime-project
+*.sublime-workspace
