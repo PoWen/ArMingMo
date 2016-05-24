@@ -204,3 +204,8 @@ https://visualhunt.com/
 {"act":"Hero.getFeastInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
 {"act":"RewardActivity.getSevenDayFundRewardInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
 {"act":"System.ping","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9","body":"{\"clientTime\":\"1463809748641\"}"}
+
+
+// 軍府
+{"act":"Manor.retireAll","sid":"f707ca4616d8ec06b5308e2b419eab53b03c92d4","body":"{\"decId\":1}"}
+1 2 5 6 7 8 9 12

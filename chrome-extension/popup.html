@@ -16,7 +16,12 @@
         background: black;
       }
       #ArMingMo-button-area {
-        /* avoid an excessively wide status text */
+        white-space: pre;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 150px;
+      }
+      #hidden-area {
         white-space: pre;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -36,19 +41,30 @@
   <body>
     <div><textarea id="status" cols=20 rows=3></textarea></div>
     <div>
-      <button id="button1">確認連線狀態</button>
+      <button id="ArMing-status">確認阿明謀狀態</button>
     </div>
-    <div id="ArMingMo-button-area" style="visibility: visible">
+    <div id="ArMingMo-button-area" style="visibility: hidden">
+      <button id="manor-switch"  style="width:39px;height:39px;background-image:url('manorSwitch.png');" title="扮豬吃老虎 就愛下軍府"></button>軍府切換<br>
+      上軍府順序: <input id="seq-of-manor-on" type="text" value="7,6,1,5,2,12,9,8" /><br>
+      共 8 個數字，以<br>
+      逗點隔開無空格,<br>
+      1:馬 2:步兵 <br>
+      5:遠程 6:近戰<br>
+      7:男 8:女<br>
+      9:兵 12:防
+    </div>    
+    <div id="hidden-area" style="visibility: hidden">
       <button id="roulette" style="width:39px;height:39px;background-image:url('roulette.png');" title="一鍵轉完免費輪盤"></button>一鍵轉盤
       <button id="archery"  style="width:39px;height:39px;background-image:url('archery.png');" title="百步穿楊盲箭客 一鍵一箭射"></button>百步穿楊
-      <button id="grass-man"  style="width:39px;height:39px;background-image:url('grass-man.png');" title="草船借箭 一鍵全兌換銀兩"></button>草人點金<br>
-
+      <button id="grass-man"  style="width:39px;height:39px;background-image:url('grass-man.png');" title="草船借箭 一鍵全兌換銀兩"></button>草人點金
+      <button id="manor-switch"  style="width:39px;height:39px;background-image:url('manorSwitch.png');" title="扮豬吃老虎 就愛下軍府"></button>軍府切換
+      <button id="manor-switch"  style="width:39px;height:39px;background-image:url('ArMingEye.png');" title="戰場軍功探測器"></button>阿明之眼<br>
+      
       <button id="boss-war"  style="width:39px;height:39px;background-image:url('boss-war.png');" title="時間到自動派兵神將"></button>神將無雙<div id="boss-war-status">運轉狀態: 未啟動</div>
       <button id="war-send"  style="width:39px;height:39px;background-image:url('war-send.png');" title="時間到自動派兵"></button>國戰派兵<div id="war-send-status">下次時間:未指定 目標: 未指定</div>
       <button id="war-declare"  style="width:39px;height:39px;background-image:url('war-declare.png');" title="時間到自動宣戰"></button>國戰宣戰<div id="war-declare-status">下次時間:未指定 目標: 未指定</div>
-
-
     </div>
+
   </body>
 </html>
 
