@@ -3,39 +3,40 @@
  * ArMingMo
  *
  */
-
 // Container of background and tab Objs
-var msgFromBackground = {};
-// {
-//   tabId: '',
-//   sid: '',
-//   url: ''
-// };
-// schema of msgToBackground:
-// {
-//   tabId: String, // tabId
-//   sid: String, // sid
-//   url: String, // url
-// }
-var msgToBackground = {
-  state: {
-    bossWarTimerCalledFlag: 0,
-    fireFlag: 0,
-    manorStatus: 1 // 0: manor off, 1: manor on
-  },
-  tabId: '',
-  msg: ''
-};
-// schema of msgToBackground:
-// {
-//   state: {
-//     bossWarTimerCalledFlag: String, // Flag
-//   },
-//   tabId: String,
-//   msg: String
-// }
+var msgFromBackground = (localStorage.msgFromBackground) ? 
+                        JSON.parse(localStorage.getItem("msgFromBackground")) : 
+                        {};
 
-tabObj = {};
+var msgToBackground = (localStorage.msgToBackground) ? 
+                      JSON.parse(localStorage.getItem("msgToBackground")) : 
+                      {
+                        state: {
+                          bossWarTimerCalledFlag: 0,
+                          fireFlag: 0,
+                          manorStatus: 1,// 0: manor off, 1: manor on
+                          manorString: '7,6,1,5,2,12,9,8'
+                        },
+                        tabId: '',
+                        msg: ''
+                      };
+
+
+var tabObj = {};
+
+var tabSwitcher = (localStorage.getItem(tabSwitcher)) ?
+Number(localStorage.getItem("tabSwitcher")) :
+'';
+var tabStatus = (localStorage.tabStatus) ? 
+JSON.parse(localStorage.getItem("tabStatus")) : 
+[{
+  tabId: '',
+  manorString: '7,6,1,5,2,12,9,8',
+  manorStatus: 1,// 0: manor off, 1: manor on
+  sid: '',
+  url: ''
+}];
+
 
 // Global functions -----------------------------------------------------------------
 // Get current tabId
@@ -87,72 +88,82 @@ var getResponseInfo = function(responseText) {
 
 // # manor switch
 var manorOff = function() {
-  var url = msgFromBackground.url;
+  var url = tabStatus[tabSwitcher].url;
   var retireString = function(decId) {
     strReturn = '{"act":"Manor.retireAll","sid":"' 
-                + msgFromBackground.sid
+                + tabStatus[tabSwitcher].sid
                 +'","body":"{\'decId\':'
                 + decId
                 + '}"}';
     return strReturn;
   }
   var retireArray = [1, 2, 5, 6, 7, 8, 9, 12];
-  for (var i = 0; i < retireArray.length; i++) {
-    httpPostString(retireString(retireArray[i]), url, function(){});
+  var i = 0;  
+  var asycPost = function() {
+    i++;
+    httpPostString(retireString(retireArray[i]), url, (i < retireArray.length-1)? asycPost: function(){});
   }
+  httpPostString(retireString(retireArray[i]), url, asycPost)
 }
-  // 1 2 5 6 7 8 9 12
-  // }
+
 var manorOn = function() {
-  var url = msgFromBackground.url;
+  var url = tabStatus[tabSwitcher].url;
   var autoAppointString = function(decId) {
     strReturn = '{"act":"Manor.autoAppoint","sid":"' 
-                + msgFromBackground.sid
+                + tabStatus[tabSwitcher].sid
                 +'","body":"{\'decId\':'
                 + decId
                 + '}"}';
     return strReturn;
   }
+  tabStatus[tabSwitcher].manorString = document.getElementById('seq-of-manor-on').value;
+  localStorage.setItem("tabStatus", JSON.stringify(tabStatus));
   appointArray = document.getElementById('seq-of-manor-on').value.split(',');
-  var i = 0;
-  var myvar = setInterval(function(){
-    httpPostString(autoAppointString(appointArray[i]), url, function(){});
+
+  var i = 0;  
+  var asycPost = function() {
     i++;
-    if (i == (appointArray.length - 1)){
-      clearInterval(myvar);
-    }
-  },200);
-  // for (var i = 0; i < appointArray.length; i++) {
-    
-  // }
+    httpPostString(autoAppointString(appointArray[i]), url, (i < appointArray.length-1)? asycPost: function(){});
+  }
+  httpPostString(autoAppointString(appointArray[i]), url, asycPost)
+
 }
 
 // # Controls: Popup trigger background 
 // My first function for chrome extension: Check the ArMingMo status to open the whole popup
 var myFirstExtFunc = function() {
   console.log('listened!')
-  if(msgFromBackground.sid){
+  if(tabStatus[tabSwitcher].sid){
     renderStatus('阿明謀成功開啟!');
     document.getElementById("ArMingMo-button-area").style.visibility = 'visible';
     document.getElementById("ArMing-status").style.visibility = 'hidden';
+    if(tabStatus[tabSwitcher].manorStatus == 0) {
+      document.getElementById("manor-switch").title = '表人趁現在 一鍵上軍府';
+      document.getElementById("manor-switch").style['background-image'] = "url('manorSwitchOff.png')";
+    }  else {
+      document.getElementById("manor-switch").title = '扮豬吃老虎 就愛下軍府';
+      document.getElementById("manor-switch").style['background-image'] = "url('manorSwitch.png')";
+    }
   } else {
     renderStatus('請點擊主公頭像');
   }
 }
 // switch manor
 var manorSwitch = function() {
-  if(msgToBackground.state.manorStatus == 1) {
+  if(tabStatus[tabSwitcher].manorStatus == 1) {
     manorOff();
     renderStatus('軍府已下!');
     document.getElementById("manor-switch").title = '表人趁現在 一鍵上軍府';
     document.getElementById("manor-switch").style['background-image'] = "url('manorSwitchOff.png')";
-    msgToBackground.state.manorStatus = 0;
+    tabStatus[tabSwitcher].manorStatus = 0;
+    localStorage.setItem("tabStatus", JSON.stringify(tabStatus));
   }  else {
     manorOn();
     renderStatus('軍府已上!');
     document.getElementById("manor-switch").title = '扮豬吃老虎 就愛下軍府';
     document.getElementById("manor-switch").style['background-image'] = "url('manorSwitch.png')";
-    msgToBackground.state.manorStatus = 1;
+    tabStatus[tabSwitcher].manorStatus = 1;
+    localStorage.setItem("tabStatus", JSON.stringify(tabStatus));
   }
 }
 
@@ -160,11 +171,7 @@ var manorSwitch = function() {
 var bossWarTimerCalledFlag = 0;
 var fireFlag = 0;
 msgToBackground.state.bossWarTimerCalledFlag = bossWarTimerCalledFlag;
-// var bossWar = function () {
-//   var JSONstr = JSON.stringify(msgToBackground);
-//   // var JSONstr = 'Boss War CAlled!'
-//   postToBg(JSONstr);
-// }
+
 var bossWar = function() {
   var today = new Date();
   if (today.getDay() == 0 || today.getDay() == 5) {
@@ -229,29 +236,64 @@ function renderDiv(divName,divText) {
 
 
 // Entrance of popup--------------------------------------------------
-// get current tabId and print to view
-getCurrentTabId(function(id){
-  renderStatus('tabId: '+id);
-  msgToBackground.tabId = id;
-})
+
 // comm. to background.html pages
 var port = chrome.extension.connect({name: "Sample Communication"});
 msgToBackground.msg = 'Hi Background';
 port.postMessage(JSON.stringify(msgToBackground));
 
-// ## Listeners
-// Listen to background connect
 port.onMessage.addListener(function(msg) {
-  console.log("message recieved"+ msg);
-  msgFromBackground = JSON.parse(msg);
+  //console.log("Global message recieved"+ msg);
+  JSONmsg = JSON.parse(msg);
+  msgFromBackground = JSONmsg;
+  if(tabSwitcher) {
+    tabStatus[tabSwitcher].sid = JSONmsg.sid;
+    tabStatus[tabSwitcher].url = JSONmsg.url;
+    localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+  }
+  
 });
+
+
+// ## Listeners
 // when popup loads, add listeners to buttons
 document.addEventListener('DOMContentLoaded', function() {
+  console.log("after DOM loaded message recieved"+ msgFromBackground);
+
+  getCurrentTabId(function(id){
+    renderStatus('tabId: '+id);
+    msgToBackground.tabId = id;
+    pastTabSwitcher = Number(localStorage.getItem('tabSwitcher'));
+
+    var a = tabStatus.findIndex(function(d) { return d.tabId == id});
+    if ( a != -1) {
+      tabSwitcher = a;
+    } else {
+      tabSwitcher = tabStatus.length;
+      console.log('tabSwitcher:',tabSwitcher);
+      tabStatus[tabSwitcher] = {};
+      tabStatus[tabSwitcher].tabId = id;
+      tabStatus[tabSwitcher].manorString = '7,6,1,5,2,12,9,8';
+    }
+
+    
+    localStorage.setItem('tabSwitcher',tabSwitcher);
+    document.getElementById('seq-of-manor-on').value = tabStatus[tabSwitcher].manorString;
+
+    // Check ArMingMo at correct Tab
+    if(tabSwitcher == pastTabSwitcher){
+      myFirstExtFunc();
+    } else {
+      renderStatus('請先點擊主公頭像!');
+      console.log(msgFromBackground)
+    }
+  })
+
+  // Listen to button clicks
   document.getElementById('ArMing-status').addEventListener('click', myFirstExtFunc); // ArMing connect
   document.getElementById('manor-switch').addEventListener('click', manorSwitch); // Switch the manor to tune your power
   document.getElementById('roulette').addEventListener('click', roulette); // Roulette
   //document.getElementById('grass-man').addEventListener('click', grass); // Earn money from grass-man
-  
   document.getElementById('boss-war').addEventListener('click', bossWar); // Boss-war
 
 });

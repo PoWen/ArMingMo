@@ -4,8 +4,7 @@ var msgToPopup = [];
 msgToPopup[0] = {};
 // msgToPopup.forEach(function(tabMsg) {if(tabMsg.tabId == xxx) {console.log('hi',tabMsg.tabId)}})
 
-var msgFromPopup = [];
-msgFromPopup[0] = {};
+var msgFromPopup = {};
 
 var serverInfo; // the container to store response information from httpPostString method 
 var tabSwitcher = 0; // the state of the active tab
@@ -38,6 +37,7 @@ var getTabIdandSwitch = function() {
       console.log('tabSwitcher:',tabSwitcher);
       msgToPopup[tabSwitcher] = {};
       msgToPopup[tabSwitcher].tabId = id;
+      msgToPopup[tabSwitcher].state = {};
     }
   })
 }
@@ -176,19 +176,27 @@ chrome.extension.onConnect.addListener(function(port) {
   console.log("Connected .....");
   port.onMessage.addListener(function(msg) {
         console.log("message recieved "+ JSON.parse(msg).msg);
-        popupPostTriggerFunc(msg); 
+        // popupPostTriggerFunc(msg); 
+        msgFromPopup = JSON.parse(msg);
+              
         port.postMessage(JSON.stringify(msgToPopup[tabSwitcher]));
+
+        msgToPopup[tabSwitcher].state.manorString = msgFromPopup.state.manorString;
+        console.log('check:', JSON.stringify(msgToPopup[tabSwitcher]));
+        
   });
 });
 
 
 // popup trigger this function
 var popupPostTriggerFunc = function(msg) {
-  msgFromPopup[tabSwitcher] = JSON.parse(msg);
+  msgFromPopup = JSON.parse(msg);
+  msgToPopup[tabSwitcher].state.manorString = msgFromPopup.state.manorString;
+  console.log('check:', msgToPopup[tabSwitcher].state);
   //console.log(JSONObj);
   // BossWarFlagCheck before running boss war
   
-  if((msgFromPopup[tabSwitcher].state.bossWarTimerCalledFlag) & msgFromPopup[tabSwitcher].state.fireFlag == 1) {
-    bossWar(msgToPopup[tabSwitcher]);
-  }
+  // if((msgFromPopup.state.bossWarTimerCalledFlag) & msgFromPopup.state.fireFlag == 1) {
+  //   bossWar(msgToPopup[tabSwitcher]);
+  // }
 }; 
