@@ -3,6 +3,7 @@
  * ArMingMo
  *
  */
+
 // Container of background and tab Objs
 var msgFromBackground = (localStorage.msgFromBackground) ? 
                         JSON.parse(localStorage.getItem("msgFromBackground")) : 
@@ -27,6 +28,8 @@ var tabObj = {};
 var tabSwitcher = (localStorage.getItem(tabSwitcher)) ?
 Number(localStorage.getItem("tabSwitcher")) :
 '';
+
+
 var tabStatus = (localStorage.tabStatus) ? 
 JSON.parse(localStorage.getItem("tabStatus")) : 
 [{
@@ -34,7 +37,8 @@ JSON.parse(localStorage.getItem("tabStatus")) :
   manorString: '7,6,1,5,2,12,9,8',
   manorStatus: 1,// 0: manor off, 1: manor on
   sid: '',
-  url: ''
+  url: '',
+  bossWarTimerCalledFlag: 0 // 0:not called, 1: called bossWar
 }];
 
 
@@ -55,8 +59,10 @@ function getCurrentTabId(callback) {
 }
 // Background Connector
 var  postToBg = function(msg) {
-  var comm = chrome.extension.connect({name: "Communication to Bg"});
-  comm.postMessage(msg);
+  // var comm = chrome.extension.connect({name: "Communication to Bg"});
+  // comm.postMessage(msg);
+  port.postMessage(msg);
+  console.log('Post to bg',msg);
 }
 // # Post String to URL and get responses
 // Two kinds of callback:
@@ -167,49 +173,59 @@ var manorSwitch = function() {
   }
 }
 
+
 // BossWar automatic troop sender, popup part.
+var myBossWarVar;
 var bossWarTimerCalledFlag = 0;
 var fireFlag = 0;
 msgToBackground.state.bossWarTimerCalledFlag = bossWarTimerCalledFlag;
 
+// the timer view of boss war status
+function bossWarTimer() {
+  var d = new Date();
+  var restSec = 20*3600 - d.getHours()*3600 - d.getMinutes()*60 - d.getSeconds();
+  var renderString;
+  divString = '神將倒數 ' + Math.floor(restSec/3600) + ':' 
+                        + Math.floor((restSec%3600)/60) + ':' 
+                        + Math.floor((restSec%3600)%60);
+  renderDiv('boss-war-status',divString); 
+
+  if (d.getHours() == 20 & d.getMinutes() >= 0 & d.getMinutes() <= 30 & d.getSeconds() >= 0) {
+    renderDiv('boss-war-status','該是阿明謀派兵中...');
+    // if(fireFlag == 0) {
+    //   fireFlag = 1;
+    //   msgToBackground.state.fireFlag = fireFlag;
+    //   postToBg(JSON.stringify(msgToBackground));
+    // } 
+  } else if (d.getHours() == 20 & d.getMinutes() >= 30) {
+    renderDiv('boss-war-status','神將結束!');
+    fireFlag = 0;
+    clearInterval(myBossWarVar);
+  }
+}
+
 var bossWar = function() {
-  var today = new Date();
-  if (today.getDay() == 0 || today.getDay() == 5) {
+  var now = new Date();
+  if (now.getDay() == 0 || now.getDay() == 5) {
     renderStatus('今天有神將!');
     if (bossWarTimerCalledFlag == 0) {
-      var myVar = setInterval(myTimer, 1000);
+      myBossWarVar = setInterval(bossWarTimer, 1000);
 
-      function myTimer() {
-        var d = new Date();
-        var restSec = 20*3600 - d.getHours()*3600 - d.getMinutes()*60 - d.getSeconds();
-        var renderString;
-        divString = '神將倒數 ' + Math.floor(restSec/3600) + ':' 
-                              + Math.floor((restSec%3600)/60) + ':' 
-                              + Math.floor((restSec%3600)%60);
-        renderDiv('boss-war-status',divString); 
-
-        if (d.getHours() == 20 & d.getMinutes() >= 0 & d.getMinutes() <= 30 & d.getSeconds() >= 0) {
-          renderDiv('boss-war-status','阿明謀派兵中...');
-          if(fireFlag == 0) {
-            fireFlag = 1;
-            msgToBackground.state.fireFlag = fireFlag;
-            postToBg(JSON.stringify(msgToBackground));
-          } 
-        } else if (d.getHours() == 20 & d.getMinutes() >= 30) {
-          renderDiv('boss-war-status','神將結束!');
-          fireFlag = 0;
-          clearInterval(myVar);
-        }
-      }
+      
+      // change bossWar Status
       bossWarTimerCalledFlag = 1;
-      msgToBackground.state.bossWarTimerCalledFlag = bossWarTimerCalledFlag;
-      var JSONstr = JSON.stringify(msgToBackground);
-      postToBg(JSONstr);
+      
+      // post the timer trigger of bossWar to background
+      var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
+      postToBg(JSONstr);  
+    
+    
+      tabStatus[tabSwitcher].bossWarTimerCalledFlag = bossWarTimerCalledFlag;
+      localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+
     } else if (bossWarTimerCalledFlag == 1) {
       renderStatus('神將已開，請去約會~')
     } 
-
-    
   } else {
     renderStatus('今天沒有神將!');
   }
@@ -242,9 +258,11 @@ var port = chrome.extension.connect({name: "Sample Communication"});
 msgToBackground.msg = 'Hi Background';
 port.postMessage(JSON.stringify(msgToBackground));
 
+// Listen to background message feeding
 port.onMessage.addListener(function(msg) {
   //console.log("Global message recieved"+ msg);
   JSONmsg = JSON.parse(msg);
+  // TODO: ISSUE- We should check if the msg comming from current Tab, right?   
   msgFromBackground = JSONmsg;
   if(tabSwitcher) {
     tabStatus[tabSwitcher].sid = JSONmsg.sid;
@@ -288,6 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log(msgFromBackground)
     }
   })
+
 
   // Listen to button clicks
   document.getElementById('ArMing-status').addEventListener('click', myFirstExtFunc); // ArMing connect

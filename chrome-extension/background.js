@@ -72,7 +72,7 @@ var getResponseInfo = function(responseText) {
 
 // bossWar
 var bossWar = function(msgObj) {
-  sid = msgObj.sid;
+  var sid = msgObj.sid;
   postAddress = msgObj.url;
 
   var timeFlag = 0;
@@ -108,7 +108,7 @@ var bossWar = function(msgObj) {
   }
 
   // getTroopInfo from PK
-  var getPKTroops = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'PK\'}"}';
+  var getPKTroops = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'BOSS_WAR_PK\'}"}';
   var troopInfoFlag = 0;
   console.log(getPKTroops);
   httpPostStringOri(getPKTroops);
@@ -119,14 +119,16 @@ var bossWar = function(msgObj) {
   function myTimer() {
       var d = new Date();
       console.log(d.toLocaleTimeString());
+      console.log('sid:',sid);
+      console.log('troopCode:',troopCode)
       if ((d.getDay() == 5||d.getDay() == 0) & d.getHours() == 20 & d.getMinutes() >= 0 & d.getMinutes() <= 30 ) {
         timeFlag = 1;
         troopFlag+= 1;
       }
-      else {
-        timeFlag = 0;
-        clearInterval(myVar);
-      }
+      // else {
+      //   timeFlag = 0;
+      //   clearInterval(myVar);
+      // }
 
       if ((troopFlag%31) == 1) {
         sendTroops();
@@ -175,13 +177,13 @@ chrome.tabs.onActiveChanged.addListener(getTabIdandSwitch)
 chrome.extension.onConnect.addListener(function(port) {
   console.log("Connected .....");
   port.onMessage.addListener(function(msg) {
-        console.log("message recieved "+ JSON.parse(msg).msg);
-        // popupPostTriggerFunc(msg); 
+        console.log("message recieved @@ "+ msg);
+        popupPostTriggerFunc(msg); 
         msgFromPopup = JSON.parse(msg);
-              
+                      
         port.postMessage(JSON.stringify(msgToPopup[tabSwitcher]));
 
-        msgToPopup[tabSwitcher].state.manorString = msgFromPopup.state.manorString;
+        // msgToPopup[tabSwitcher].state.manorString = msgFromPopup.state.manorString;
         console.log('check:', JSON.stringify(msgToPopup[tabSwitcher]));
         
   });
@@ -191,12 +193,13 @@ chrome.extension.onConnect.addListener(function(port) {
 // popup trigger this function
 var popupPostTriggerFunc = function(msg) {
   msgFromPopup = JSON.parse(msg);
-  msgToPopup[tabSwitcher].state.manorString = msgFromPopup.state.manorString;
-  console.log('check:', msgToPopup[tabSwitcher].state);
+  //msgToPopup[tabSwitcher].state.manorString = msgFromPopup.state.manorString;
+  console.log('check popup trigger function:', msg);
   //console.log(JSONObj);
+  
   // BossWarFlagCheck before running boss war
   
-  // if((msgFromPopup.state.bossWarTimerCalledFlag) & msgFromPopup.state.fireFlag == 1) {
-  //   bossWar(msgToPopup[tabSwitcher]);
-  // }
+  if((msgFromPopup.bossWarTimerCalledFlag) & msgFromPopup.bossWarTimerCalledFlag == 1) {
+    bossWar(msgFromPopup);
+  }
 }; 
