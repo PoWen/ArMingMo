@@ -325,6 +325,57 @@ var manorDetect = function() {
   }
 }
 
+var roulette = function() {
+  if(tabStatus[tabSwitcher].sid) {
+    var rouletteCheck = function(responseText) {
+      var rouletteResponse = JSON.parse(responseText);
+      console.log(rouletteResponse);
+      if (rouletteResponse.ok){
+        httpPostString(refreshLottery, url, rouletteCheck);
+        renderStatus('刷新'); 
+      }
+      else if (rouletteResponse.freeLotteryTimes > 1){
+        spinTimes = rouletteResponse.freeLotteryTimes;
+        renderStatus("剩餘免費次數:" + spinTimes + '\n'); 
+        httpPostString(drawLottery, url, rouletteCheck);
+      }
+      else renderStatus("剩下最後一轉，請轉一下確認拿到多少鐵!")
+    }
+    var sid = tabStatus[tabSwitcher].sid;
+    var url = tabStatus[tabSwitcher].url;
+    var drawLottery = '{"act":"Lottery.drawLottery","sid":"' + sid + '"}';
+    var refreshLottery = '{"act":"Lottery.refreshLottery","sid":"' + sid + '"}';
+    httpPostString(drawLottery, url, rouletteCheck)
+  } else {
+    renderStatus('請點擊主公頭像');
+  }
+}
+
+var grassMan = function() {
+  if(tabStatus[tabSwitcher].sid) {
+    var grassRewardGold = function(responseText) {
+      var grassResponse = JSON.parse(responseText);
+      if (grassResponse.ok == 1){
+        rewardTimes+= 1;
+        var renderGrass = "領取金幣次數:" + rewardTimes;
+        renderStatus(renderGrass); 
+        httpPostString(grassArrowGold2W,url,grassRewardGold);    
+      } else {
+        var renderGrass = "領完囉~ 共領:" + rewardTimes*eachReward + "銀幣，下班!";
+        renderStatus(renderGrass);
+      }
+    }
+    var sid = tabStatus[tabSwitcher].sid;
+    var url = tabStatus[tabSwitcher].url;
+    var rewardTimes = 0;
+    var eachReward = 20000;
+    var grassArrowGold2W = '{\"act\":\"GrassArrow.exchangeGrassArrow\",\"sid\":\"' + sid + '\",\"body\":\"{\'itemId\':11}\"}';
+    httpPostString(grassArrowGold2W, url, grassRewardGold)
+  } else {
+    renderStatus('請點擊主公頭像');
+  }
+}
+
 // ----------------------------------------------------------------------------------
 
 // # View render --------------------------------------------------------------------
@@ -408,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('manor-switch').addEventListener('click', manorSwitch); // Switch the manor to tune your power
   document.getElementById('roulette').addEventListener('click', roulette); // Roulette
   document.getElementById('manor-detect').addEventListener('click', manorDetect); // Detect the earned manor
-  // Earn money from grass-man
+  document.getElementById('grass-man').addEventListener('click', grassMan); // Earn money from grass-man
   document.getElementById('boss-war').addEventListener('click', bossWar); // Boss-war
 
 });

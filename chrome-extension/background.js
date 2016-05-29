@@ -158,7 +158,7 @@ getCurrentTabId(function(id){
         var resultString = "";
         for(i=0;i<buf2Int8.length;i++){resultString+= String.fromCharCode(buf2Int8[i]);}
         JSONObj = JSON.parse(resultString);
-        console.log(JSONObj);
+        //console.log(JSON.stringify(JSONObj));
         if(JSONObj.sid) { 
           msgToPopup[tabSwitcher].sid = JSONObj.sid;
           msgToPopup[tabSwitcher].url = details.url;
