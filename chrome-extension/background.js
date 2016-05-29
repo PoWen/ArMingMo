@@ -8,7 +8,7 @@ var msgFromPopup = {};
 
 var serverInfo; // the container to store response information from httpPostString method 
 var tabSwitcher = 0; // the state of the active tab
-
+var tempScope;
 
 // Global functions ---------------------------------------------------------
 
@@ -158,10 +158,14 @@ getCurrentTabId(function(id){
         var resultString = "";
         for(i=0;i<buf2Int8.length;i++){resultString+= String.fromCharCode(buf2Int8[i]);}
         JSONObj = JSON.parse(resultString);
-        console.log(JSON.stringify(JSONObj));
+        console.log(JSONObj);
         if(JSONObj.sid) { 
           msgToPopup[tabSwitcher].sid = JSONObj.sid;
           msgToPopup[tabSwitcher].url = details.url;
+          tempScope = JSONObj;
+          if((JSONObj.act) && JSONObj.act == 'NationalWar.enterWar') {
+            msgToPopup[tabSwitcher].enterWarCityId = JSON.parse(JSONObj.body).cityId;
+          }
         }  
       }
     },  

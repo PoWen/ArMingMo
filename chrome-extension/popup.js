@@ -4,6 +4,72 @@
  *
  */
 
+
+//
+var cityIdMap = {
+  "虎牢關" : 107,
+  "博望坡" : 113,
+  "葭萌關" : 124,
+  "夷陵" : 117,
+  "檀溪" : 114,
+  "白馬" : 103,
+  "濡須口" : 110,
+  "牛渚" : 111,
+  "綿竹關" : 126,
+  "白水關" : 125,
+  "陽平關" : 123,
+  "五丈原" : 119,
+  "武關" : 109,
+  "潼關" : 118,
+  "街亭" : 122,
+  "散關" : 120,
+  "祁山" : 121,
+  "函谷關" : 108,
+  "雁門關" : 101,
+  "界橋" : 100,
+  "壺關" : 102,
+  "官渡" : 105,
+  "汜水關" : 106,
+  "定陶" : 104,
+  "華容" : 116,
+  "赤壁" : 112,
+  "長阪坡" : 115,
+  "上庸": 33
+}
+
+var cityNameMap = {
+  "107": "虎牢關",
+  "113": "博望坡",
+  "124": "葭萌關",
+  "117": "夷陵",
+  "114": "檀溪",
+  "103": "白馬",
+  "110": "濡須口",
+  "111": "牛渚",
+  "126": "綿竹關",
+  "125": "白水關",
+  "123": "陽平關",
+  "119": "五丈原",
+  "109": "武關",
+  "118": "潼關",
+  "122": "街亭",
+  "120": "散關",
+  "121": "祁山",
+  "108": "函谷關",
+  "101": "雁門關",
+  "100": "界橋",
+  "102": "壺關",
+  "105": "官渡",
+  "106": "汜水關",
+  "104": "定陶",
+  "116": "華容",
+  "112": "赤壁",
+  "115": "長阪坡",
+  "33": "上庸"
+}
+
+
+
 // Container of background and tab Objs
 var msgFromBackground = (localStorage.msgFromBackground) ? 
                         JSON.parse(localStorage.getItem("msgFromBackground")) : 
@@ -90,6 +156,14 @@ var responseInfo = function(responseText) {
 // put serverInfo into global vars
 var getResponseInfo = function(responseText) {
   serverInfo = JSON.parse(responseText)
+}
+var manorResponseInfo = function(responseText) {
+  var manorResponse = JSON.parse(responseText);
+  if(manorResponse.disp.rewards){
+    renderStatus(manorResponse.disp.rewards.resources.CONTRIBUTION)  
+  } else {
+    renderStatus('0');
+  }
 }
 
 // # manor switch
@@ -231,6 +305,25 @@ var bossWar = function() {
   }
 }
 
+var manorDetect = function() {
+  if(!(tabStatus[tabSwitcher].enterWarCityId)){
+    renderStatus('偵測不到戰場請再次進入戰場');
+  } else {
+    var cityId = tabStatus[tabSwitcher].enterWarCityId
+    var cityName = cityNameMap[cityId.toString()];
+    var NationalWarStr = '{"act":"NationalWar.enterWar","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'cityId\':' + cityId +'}"}';
+    detectResponseHeader = '偵測' + cityName + '軍功中...'
+    renderStatus(detectResponseHeader);
+    //console.log(NationalWarStr)
+    httpPostString(NationalWarStr, tabStatus[tabSwitcher].url, manorResponseInfo)   
+    
+    //renderStatus(cityName);
+
+    //}
+
+    //renderStatus('阿明累了, 乖乖等信件啦!')
+  }
+}
 
 // ----------------------------------------------------------------------------------
 
@@ -267,6 +360,8 @@ port.onMessage.addListener(function(msg) {
   if(tabSwitcher) {
     tabStatus[tabSwitcher].sid = JSONmsg.sid;
     tabStatus[tabSwitcher].url = JSONmsg.url;
+    tabStatus[tabSwitcher].enterWarCityId = JSONmsg.enterWarCityId;
+    console.log(JSONmsg)
     localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
   }
   
@@ -312,7 +407,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('ArMing-status').addEventListener('click', myFirstExtFunc); // ArMing connect
   document.getElementById('manor-switch').addEventListener('click', manorSwitch); // Switch the manor to tune your power
   document.getElementById('roulette').addEventListener('click', roulette); // Roulette
-  //document.getElementById('grass-man').addEventListener('click', grass); // Earn money from grass-man
+  document.getElementById('manor-detect').addEventListener('click', manorDetect); // Detect the earned manor
+  // Earn money from grass-man
   document.getElementById('boss-war').addEventListener('click', bossWar); // Boss-war
 
 });
