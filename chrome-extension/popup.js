@@ -407,15 +407,16 @@ port.onMessage.addListener(function(msg) {
   //console.log("Global message recieved"+ msg);
   JSONmsg = JSON.parse(msg);
   // TODO: ISSUE- We should check if the msg comming from current Tab, right?   
-  msgFromBackground = JSONmsg;
-  if(tabSwitcher) {
-    tabStatus[tabSwitcher].sid = JSONmsg.sid;
-    tabStatus[tabSwitcher].url = JSONmsg.url;
-    tabStatus[tabSwitcher].enterWarCityId = JSONmsg.enterWarCityId;
-    console.log(JSONmsg)
-    localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+  if((JSONmsg.tabId) && JSONmsg.tabId == tabStatus[tabSwitcher].tabId ) {
+    msgFromBackground = JSONmsg;
+    if(tabSwitcher) {
+      tabStatus[tabSwitcher].sid = JSONmsg.sid;
+      tabStatus[tabSwitcher].url = JSONmsg.url;
+      tabStatus[tabSwitcher].enterWarCityId = JSONmsg.enterWarCityId;
+      console.log(JSONmsg)
+      localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+    }
   }
-  
 });
 
 
