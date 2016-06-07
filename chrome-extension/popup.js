@@ -134,6 +134,17 @@ var  postToBg = function(msg) {
 // Two kinds of callback:
 // i) responseInfo: print the parsed JSON server response to console
 // ii) getResponseInfo: put the parsed JSON server response into global variable "serverInfo"
+
+var httpGet = function(url) {
+  var httpRequest = new XMLHttpRequest();
+  httpRequest.open("GET",url,true);
+  httpRequest.setRequestHeader("Accept","*/*");
+  httpRequest.setRequestHeader("Accept-Language","zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4,zh-CN;q=0.2");
+  httpRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+  httpRequest.setRequestHeader("X-Requested-With","ShockwaveFlash/21.0.0.216");
+  httpRequest.send();
+}
+
 var httpPostString = function(stringContent, url, callback) {
   var httpRequest = new XMLHttpRequest();
   httpRequest.open("POST",url,true);
@@ -376,6 +387,99 @@ var grassMan = function() {
   }
 }
 
+var shootTimes = 0;
+var shootScore = 0;
+var oneArchery = function() {
+  if(tabStatus[tabSwitcher].sid) {
+    var doShoot = function(responseText){
+      var showScore = function(shootInfoText) {
+        shootInfo = JSON.parse(shootInfoText);
+        if(shootInfo.nWind){
+          if(shootTimes < 10){
+            shootTimes++;
+            var getScore = (shootInfo.ring);
+            shootScore+= getScore;
+            var scoreString = '射出第' + shootTimes + '箭, 得' + getScore + '分';
+            renderStatus(scoreString);
+            
+          } else {
+            var getScore = shootInfo.ring;
+            shootScore+= getScore;
+            shootTimes++;
+            var scoreString = '射出第' + shootTimes + '箭, 得' + getScore + '分';
+            renderStatus(scoreString);
+            var finalScoreString = '共得' + shootScore + '分';
+            renderStatus(finalScoreString);
+          }
+        } else {
+          renderStatus('買卷用在射箭場才能開始喔!')
+        }
+      }
+      var archeryInfo = JSON.parse(responseText);
+      var nextShootX = Math.round(archeryInfo.wind*-2/30);
+      var nextShootCMD = '{"act":"Archery.shoot","sid":"' + sid + '","body":"{\'x\':' + nextShootX + ',\'y\':10,\'type\':\'ONEYEAY\'}"}';
+      httpPostString(nextShootCMD,url,showScore);
+    }
+    var sid = tabStatus[tabSwitcher].sid;
+    var url = tabStatus[tabSwitcher].url;
+    var getArcheryInfo = '{"act":"Archery.getArcheryInfo","sid":"' + sid + '","body":"{\'type\':\'ONEYEAY\'}"}';
+    httpPostString(getArcheryInfo,url,doShoot);
+  } else {
+    renderStatus('請點擊主公頭像');
+  }
+}
+
+// var oneArchery = function() {
+//   if(tabStatus[tabSwitcher].sid) {
+//     var lookArchery = function(responseText) {
+//       var OneYearResponse = JSON.parse(responseText);
+//       if (OneYearResponse.ok == 1){
+//         var nextShoot = function(responseText) {
+//           var archeryInfo = JSON.parse(responseText);
+//           if(shootTimes < 10){
+//             shootTimes++;
+//             var getScore = (archeryInfo.ring)?archeryInfo.ring:0;
+//             shootScore+= getScore;
+//             if(shootTimes>1) {
+//               var scoreString = '射出第' + (shootTimes-1) + '箭, 得' + getScore + '分';
+//               renderStatus(scoreString);
+//             }
+//             var nextShootX = (archeryInfo.wind)? Math.round(archeryInfo.wind*-2/30) : Math.round(archeryInfo.nWind*-2/30);
+//             var nextShootCMD = '{"act":"Archery.shoot","sid":"' + sid + '","body":"{\'x\':' + nextShootX + ',\'y\':10,\'type\':\'ONEYEAY\'}"}';
+//             httpPostString(nextShootCMD,url,nextShoot);
+//           } else {
+//             var getScore = archeryInfo.ring;
+//             shootScore+= getScore;
+//             var scoreString = '射出第' + shootTimes + '箭, 得' + getScore + '分';
+//             renderStatus(scoreString);
+//             var finalScoreString = '共得' + shootScore + '分';
+//             renderStatus(finalScoreString);
+//             // var enterArcheryString1 = '{"act":"OneYear.playArcheryInfo","sid":"' + sid + '"}';
+//             // var enterArcheryString2 = '{"act":"Archery.archeryOpenInfo","sid":"' + sid + '","body":"{\'type\':\'ONEYEAY\'}"}';
+//             // httpPostString(enterArcheryString1,url,function(){});
+//             // httpPostString(enterArcheryString2,url,function(){});
+//             // httpGet('http://kingres.icantw.com/snres/res/ui/activity/archery_118211.bin?v=1461295399%5F118211');
+//             // httpGet('http://kingres.icantw.com/snres/res/effects/ui/archeryFlag_76998.bin?v=1443004136%5F76998');
+//           }
+          
+//         }
+//         var getArcheryInfo = '{"act":"Archery.getArcheryInfo","sid":"' + sid + '","body":"{\'type\':\'ONEYEAY\'}"}';
+//         httpPostString(getArcheryInfo,url,nextShoot);
+//       } else {
+//         renderStatus('異常情況, 請重整頁面手動射完')
+//       }
+//     }
+//     var sid = tabStatus[tabSwitcher].sid;
+//     var url = tabStatus[tabSwitcher].url;
+//     var shootTimes = 0;
+//     var shootScore = 0;
+//     var buyArchery = '{\"act\":\"OneYear.buyArchery\",\"sid\":\"' + sid + '\"}';
+//     httpPostString(buyArchery, url, lookArchery)
+//   } else {
+//     renderStatus('請點擊主公頭像');
+//   }
+// }
+
 // ----------------------------------------------------------------------------------
 
 // # View render --------------------------------------------------------------------
@@ -462,5 +566,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('manor-detect').addEventListener('click', manorDetect); // Detect the earned manor
   document.getElementById('grass-man').addEventListener('click', grassMan); // Earn money from grass-man
   document.getElementById('boss-war').addEventListener('click', bossWar); // Boss-war
+  document.getElementById('one-archery').addEventListener('click', oneArchery); // Archery
 
 });
