@@ -10,7 +10,7 @@
 // 9. 阿明謀純屬娛樂用, 請勿用做商業用途。使用後果請自行負責, 祝遊戲愉快。
 
 // 使用者須輸入的資訊
-var sid = "45fea2aa7301ef8b226348aeb77efaff0f87b588";
+var sid = "4601cb532aefb5e00bf5cb1ff15e09ce5c043284";
 var server = "35";
 
 
@@ -53,7 +53,7 @@ httpRequest.onreadystatechange=function() {
 }
 
 // getTroopInfo from PK
-var getPKTroops = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'PK\'}"}';
+var getPKTroops = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'BOSS_WAR_PK\'}"}';
 var troopInfoFlag = 0;
 httpPostString(getPKTroops);
 

@@ -207,5 +207,8 @@ https://visualhunt.com/
 
 
 // 軍府
+// 某項全下
 {"act":"Manor.retireAll","sid":"f707ca4616d8ec06b5308e2b419eab53b03c92d4","body":"{\"decId\":1}"}
-1 2 5 6 7 8 9 12
+//1 2 5 6 7 8 9 12
+// 某項自動委任
+{"act":"Manor.autoAppoint","sid":"f707ca4616d8ec06b5308e2b419eab53b03c92d4","body":"{\"decId\":1}"}

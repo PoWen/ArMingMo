@@ -163,9 +163,10 @@ getCurrentTabId(function(id){
           msgToPopup[tabSwitcher].sid = JSONObj.sid;
           msgToPopup[tabSwitcher].url = details.url;
           tempScope = JSONObj;
-          if((JSONObj.act) && JSONObj.act == 'NationalWar.enterWar') {
-            msgToPopup[tabSwitcher].enterWarCityId = JSON.parse(JSONObj.body).cityId;
+          if((JSONObj.act) && JSONObj.act == 'Starry.fight') {
+            msgToPopup[tabSwitcher].starCampaignId = JSON.parse(JSONObj.body).campaignId;
           }
+
         }  
       }
     },  
