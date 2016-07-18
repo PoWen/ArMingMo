@@ -412,17 +412,17 @@ var oneArchery = function() {
             renderStatus(finalScoreString);
           }
         } else {
-          renderStatus('買卷用在射箭場才能開始喔!')
+          renderStatus('拳四狼: 你已經射了!')
         }
       }
       var archeryInfo = JSON.parse(responseText);
       var nextShootX = Math.round(archeryInfo.wind*-2/30);
-      var nextShootCMD = '{"act":"Archery.shoot","sid":"' + sid + '","body":"{\'x\':' + nextShootX + ',\'y\':10,\'type\':\'ONEYEAY\'}"}';
+      var nextShootCMD = '{"act":"Archery.shoot","sid":"' + sid + '","body":"{\'x\':' + nextShootX + ',\'y\':10,\'type\':\'NORMAL\'}"}';
       httpPostString(nextShootCMD,url,showScore);
     }
     var sid = tabStatus[tabSwitcher].sid;
     var url = tabStatus[tabSwitcher].url;
-    var getArcheryInfo = '{"act":"Archery.getArcheryInfo","sid":"' + sid + '","body":"{\'type\':\'ONEYEAY\'}"}';
+    var getArcheryInfo = '{"act":"Archery.getArcheryInfo","sid":"' + sid + '","body":"{\'type\':\'NORMAL\'}"}';
     httpPostString(getArcheryInfo,url,doShoot);
   } else {
     renderStatus('請點擊主公頭像');
@@ -443,7 +443,7 @@ var starDetect = function() {
 
 
 var starGet = function() {
-  campaignId = tabStatus[tabSwitcher].starCampaignId;
+  campaignId = document.getElementById("star-get-id");
   var getAttFormation = function(responseText) {
     var getNextEnemies = function(responseText) {
       var troopResponse = JSON.parse(responseText);
@@ -486,7 +486,7 @@ var starGet = function() {
 
 }
 
-var starFive = function() {
+var starThree = function() {
 	var starEat = function() {
 	  var getAttFormation = function(responseText) {
 	    var getNextEnemies = function(responseText) {
@@ -530,14 +530,56 @@ var starFive = function() {
 	  httpPostString(getStarryInfo, url, getAttFormation)
 	}
 
-	var campaignId = tabStatus[tabSwitcher].starCampaignId;
+	var campaignId = document.getElementById("star-three-start");
 	
 	setTimeout(starEat,0);
 	setTimeout(starEat,500);
 	setTimeout(starEat,1000);
-	setTimeout(starEat,1500);
-	setTimeout(starEat,2000);
 }
+
+  var starEatCMD = function() {
+    var getAttFormation = function(responseText) {
+      var getNextEnemies = function(responseText) {
+        var troopResponse = JSON.parse(responseText);
+        heroInfo = JSON.stringify(troopResponse.heros);
+        heroInfo = heroInfo.split("\"").join("\'");
+        chief = troopResponse.chief;
+        var saveFormation = function(responseText) {
+          var fightNext = function(responseText) {
+            var quitCampaign = function(responseText) {
+              var renderResult = function(responseText){
+                campaignId++;
+                var fightResult = JSON.parse(responseText);
+                if (fightResult.ok) {
+                  renderStatus('大概成功了吧, 離開戰鬥畫面檢查一下');
+                }
+                else {
+                  renderStatus('大概成功了吧, 不管了我要上班去了!');
+                }
+              }
+              var quitCampaign = '{"act":"Campaign.quitCampaign","sid":"' + sid + '"}';
+              httpPostString(quitCampaign,url,renderResult)
+            }
+            var fightNextCMD = '{"act":"Campaign.fightNext","sid":"' + sid + '"}';
+            httpPostString(fightNextCMD,url,quitCampaign);
+            renderStatus('刷星'); 
+          }
+          var saveFormationCMD = '{"act":"Campaign.saveFormation","sid":"' + sid + '","body":"{\'heros\':' + heroInfo + ',\'chief\':' + chief + '}"}';
+          httpPostString(saveFormationCMD,url,fightNext);
+        }
+        var nextEnemiesCMD = '{"act":"Campaign.nextEnemies","sid":"' + sid + '"}';
+        httpPostString(nextEnemiesCMD,url,saveFormation)
+      }
+      getAttFormationCMD = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'STARRY\'}"}';
+      httpPostString(getAttFormationCMD, url, getNextEnemies);
+      
+    }
+    var sid = tabStatus[tabSwitcher].sid;
+    var url = tabStatus[tabSwitcher].url;
+    var getStarryInfo = '{"act":"Starry.fight","sid":"' + sid + '","body":"{\'campaignId\':'+ campaignId + '}"}';
+    httpPostString(getStarryInfo, url, getAttFormation)
+  }
+
 // var oneArchery = function() {
 //   if(tabStatus[tabSwitcher].sid) {
 //     var lookArchery = function(responseText) {
@@ -676,9 +718,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('manor-detect').addEventListener('click', manorDetect); // Detect the earned manor
   document.getElementById('grass-man').addEventListener('click', grassMan); // Earn money from grass-man
   document.getElementById('boss-war').addEventListener('click', bossWar); // Boss-war
-  // document.getElementById('one-archery').addEventListener('click', oneArchery); // Archery
+  document.getElementById('one-archery').addEventListener('click', oneArchery); // Archery
   document.getElementById('star-detect').addEventListener('click', starDetect); // Star detect
   document.getElementById('star-get').addEventListener('click', starGet); // Star get
-  document.getElementById('star-five').addEventListener('click', starFive); // Star five
+  document.getElementById('star-three').addEventListener('click', starThree); // Star five
 
 });

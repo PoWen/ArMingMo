@@ -212,3 +212,36 @@ https://visualhunt.com/
 //1 2 5 6 7 8 9 12
 // 某項自動委任
 {"act":"Manor.autoAppoint","sid":"f707ca4616d8ec06b5308e2b419eab53b03c92d4","body":"{\"decId\":1}"}
+
+// 周年慶射箭
+{"act":"OneYear.buyArchery","sid":"38b4ffb70889083237286ac33f8dc9f3e79e6b22"}
+{"ok":1}
+{"act":"Archery.getArcheryInfo","sid":"38b4ffb70889083237286ac33f8dc9f3e79e6b22","body":"{\"type\":\"ONEYEAY\"}"}
+{"tRing":0,"arr":10,"wind":-130,"remain":9999}
+{"act":"Archery.shoot","sid":"38b4ffb70889083237286ac33f8dc9f3e79e6b22","body":"{\"x\":11,\"y\":6,\"type\":\"ONEYEAY\"}"}
+{"x":8,"y":-4,"ring":10,"nWind":560}
+{"act":"Archery.shoot","sid":"38b4ffb70889083237286ac33f8dc9f3e79e6b22","body":"{\"x\":-43,\"y\":4,\"type\":\"ONEYEAY\"}"}
+{"x":18,"y":-9,"ring":8,"nWind":-90}
+{"act":"Archery.shoot","sid":"38b4ffb70889083237286ac33f8dc9f3e79e6b22","body":"{\"x\":11,\"y\":11,\"type\":\"ONEYEAY\"}"}
+{"x":12,"y":-1,"ring":9,"nWind":210}
+{"act":"Archery.shoot","sid":"38b4ffb70889083237286ac33f8dc9f3e79e6b22","body":"{\"x\":-6,\"y\":9,\"type\":\"ONEYEAY\"}"}
+{"x":4,"y":2,"ring":10,"nWind":-240}
+{"act":"OneYear.playArcheryInfo","sid":"4601cb532aefb5e00bf5cb1fb685b27d22b97aae"}
+{"act":"Archery.archeryOpenInfo","sid":"4601cb532aefb5e00bf5cb1fb685b27d22b97aae","body":"{\"type\":\"ONEYEAY\"}"}
+
+// Get
+http://kingres.icantw.com/snres/res/ui/activity/archery_118211.bin?v=1461295399%5F118211
+http://kingres.icantw.com/snres/res/effects/ui/archeryFlag_76998.bin?v=1443004136%5F76998
+http://kingres.icantw.com/snres/res/ui/activity/archery_118211.bin?v=1461295399%5F118211
+
+
+
+{"act":"Patrol.getPatrolInfo","sid":"f707ca4616d8ec06b5308e2bd6ea705cef9a5e02"}
+// {"jf":0,"rewarded":0,"events":[{"type":"DL","id":125,"idx":0,"city":28,"sec":3576,"target":""},{"type":"DL","id":35,"idx":0,"city":113,"sec":3576,"target":""}],"nextTm":1466215224}
+
+// 自動派兵勾選
+{"act":"Hero.autoRevive","sid":"f707ca4616d8ec06b5308e2bd6ea705cef9a5e02","body":"{\"autoSendTroops\":true,\"autoRivie\":false,\"id\":1}"}  // id 應為隊伍編號 1~10 
+{"act":"Hero.autoRevive","sid":"f707ca4616d8ec06b5308e2bd6ea705cef9a5e02","body":"{\"autoSendTroops\":false,\"autoRivie\":false,\"id\":1}"}:
+
+// 拉回隊伍 (需知道隊伍uid)
+{"act":"NationalWar.pullBackCorpsReserveTroops","sid":"f707ca4616d8ec06b5308e2bd6ea705cef9a5e02","body":"{\"uid\":\"623169\"}"}
