@@ -443,47 +443,53 @@ var starDetect = function() {
 
 
 var starGet = function() {
-  campaignId = document.getElementById("star-get-id");
-  var getAttFormation = function(responseText) {
-    var getNextEnemies = function(responseText) {
-      var troopResponse = JSON.parse(responseText);
-      heroInfo = JSON.stringify(troopResponse.heros);
-      heroInfo = heroInfo.split("\"").join("\'");
-      chief = troopResponse.chief;
-      var saveFormation = function(responseText) {
-        var fightNext = function(responseText) {
-          var quitCampaign = function(responseText) {
-            var renderResult = function(responseText){
-              var fightResult = JSON.parse(responseText);
-              if (fightResult.ok) {
-                renderStatus('大概成功了吧, 離開戰鬥畫面檢查一下');
-              }
-              else {
-                renderStatus('大概成功了吧, 不管了我要上班去了!');
-              }
-            }
-            var quitCampaign = '{"act":"Campaign.quitCampaign","sid":"' + sid + '"}';
-            httpPostString(quitCampaign,url,renderResult)
-          }
-          var fightNextCMD = '{"act":"Campaign.fightNext","sid":"' + sid + '"}';
-          httpPostString(fightNextCMD,url,quitCampaign);
-          renderStatus('刷星'); 
-        }
-        var saveFormationCMD = '{"act":"Campaign.saveFormation","sid":"' + sid + '","body":"{\'heros\':' + heroInfo + ',\'chief\':' + chief + '}"}';
-        httpPostString(saveFormationCMD,url,fightNext);
-      }
-      var nextEnemiesCMD = '{"act":"Campaign.nextEnemies","sid":"' + sid + '"}';
-      httpPostString(nextEnemiesCMD,url,saveFormation)
-    }
-    getAttFormationCMD = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'STARRY\'}"}';
-    httpPostString(getAttFormationCMD, url, getNextEnemies);
+  var campaignIdHere = document.getElementById("star-get-id").value;
+  // var getAttFormation = function(responseText) {
+  //   var getNextEnemies = function(responseText) {
+  //     var troopResponse = JSON.parse(responseText);
+  //     heroInfo = JSON.stringify(troopResponse.heros);
+  //     heroInfo = heroInfo.split("\"").join("\'");
+  //     chief = troopResponse.chief;
+  //     var saveFormation = function(responseText) {
+  //       var fightNext = function(responseText) {
+  //         var quitCampaign = function(responseText) {
+  //           var renderResult = function(responseText){
+  //             var fightResult = JSON.parse(responseText);
+  //             if (fightResult.ok) {
+  //               renderStatus('大概成功了吧, 離開戰鬥畫面檢查一下');
+  //             }
+  //             else {
+  //               renderStatus('大概成功了吧, 不管了我要上班去了!');
+  //             }
+  //           }
+  //           var quitCampaign = '{"act":"Campaign.quitCampaign","sid":"' + sid + '"}';
+  //           httpPostString(quitCampaign,url,renderResult)
+  //         }
+  //         var fightNextCMD = '{"act":"Campaign.fightNext","sid":"' + sid + '"}';
+  //         httpPostString(fightNextCMD,url,quitCampaign);
+  //         renderStatus('刷星'); 
+  //       }
+  //       var saveFormationCMD = '{"act":"Campaign.saveFormation","sid":"' + sid + '","body":"{\'heros\':' + heroInfo + ',\'chief\':' + chief + '}"}';
+  //       httpPostString(saveFormationCMD,url,fightNext);
+  //     }
+  //     var nextEnemiesCMD = '{"act":"Campaign.nextEnemies","sid":"' + sid + '"}';
+  //     httpPostString(nextEnemiesCMD,url,saveFormation)
+  //   }
+  //   getAttFormationCMD = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'STARRY\'}"}';
+  //   httpPostString(getAttFormationCMD, url, getNextEnemies);
     
+  // }
+  //}
+  var starReact = function(responseText) {
+    var reactObj = JSON.parse(responseText);
+    renderStatus('掃蕩星星編號:'+ campaignIdHere)
+
   }
   var sid = tabStatus[tabSwitcher].sid;
   var url = tabStatus[tabSwitcher].url;
-  var getStarryInfo = '{"act":"Starry.fight","sid":"' + sid + '","body":"{\'campaignId\':'+ campaignId + '}"}';
-  httpPostString(getStarryInfo, url, getAttFormation)
-
+  var getStarryInfo = '{"act":"Starry.batchStarry","sid":"' + sid + '","body":"{\'campaignId\':'+ campaignIdHere + ',\'count\':1}"}';
+  // httpPostString(getStarryInfo, url, getAttFormation)
+  httpPostString(getStarryInfo, url, starReact)
 }
 
 var starThree = function() {
@@ -530,7 +536,7 @@ var starThree = function() {
 	  httpPostString(getStarryInfo, url, getAttFormation)
 	}
 
-	var campaignId = document.getElementById("star-three-start");
+	var campaignId = document.getElementById("star-three-start").value;
 	
 	setTimeout(starEat,0);
 	setTimeout(starEat,500);
