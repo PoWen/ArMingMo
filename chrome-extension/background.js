@@ -141,17 +141,59 @@ var bossWar = function(msgObj) {
   }
 }
 
+// nwl: national war loop
+var nwl = function(msgObj) {
+  console.log("nwl called!")
+  var d = 0;
+  var nw = function() {
+    console.log('d:'+ d);
+    d++;
+  }
+  var nwloop = setInterval(nw,1000);
+}
+
 // End of global functions ---------------------------------------------------------
 
 // Entrance of scripts -------------------------------------------------------------
 // get Initial tabId and listen to webRequest
-getCurrentTabId(function(id){
-  msgToPopup[tabSwitcher].tabId = id;
-  console.log('tabId:',id);
+// getCurrentTabId(function(id){
+//   msgToPopup[tabSwitcher].tabId = id;
+//   console.log('tabId:',id);
 
-  chrome.webRequest.onBeforeRequest.addListener(
-    function(details)
-    {
+//   chrome.webRequest.onBeforeRequest.addListener(
+//     function(details)
+//     {
+//       if((details.method) && details.method == 'POST') {
+//         var buf = details.requestBody.raw[0].bytes;
+//         var buf2Int8 = new Int8Array(buf);
+//         var resultString = "";
+//         for(i=0;i<buf2Int8.length;i++){resultString+= String.fromCharCode(buf2Int8[i]);}
+//         JSONObj = JSON.parse(resultString);
+//         //console.log(JSON.stringify(JSONObj));
+//         if(JSONObj.sid) { 
+//           msgToPopup[tabSwitcher].sid = JSONObj.sid;
+//           msgToPopup[tabSwitcher].url = details.url;
+//           tempScope = JSONObj;
+//           if((JSONObj.act) && JSONObj.act == 'NationalWar.enterWar') {
+//             msgToPopup[tabSwitcher].enterWarCityId = JSON.parse(JSONObj.body).cityId;
+//           }
+//           if((JSONObj.act) && JSONObj.act == 'Starry.fight') {
+//             msgToPopup[tabSwitcher].starCampaignId = JSON.parse(JSONObj.body).campaignId;
+//           }
+
+//         }  
+//       }
+//     },  
+//     {urls: ["http://*.icantw.com/*"]},
+//     ['requestBody']
+//   );
+
+// })
+
+chrome.webRequest.onBeforeRequest.addListener(
+  function(details)
+  {
+    var getPOSTmsg = function(details) {
       if((details.method) && details.method == 'POST') {
         var buf = details.requestBody.raw[0].bytes;
         var buf2Int8 = new Int8Array(buf);
@@ -171,13 +213,27 @@ getCurrentTabId(function(id){
           }
 
         }  
+      }  
+    }
+    getCurrentTabId(function(id){
+      if (!msgToPopup[tabSwitcher].tabId) {
+        msgToPopup[tabSwitcher].tabId = id;
+        console.log('find new tab, tabId:',id);
+        getPOSTmsg(details)
+      } else {
+        if (msgToPopup[tabSwitcher].tabId != id){
+        console.log('This is not POST from current tab')    
+        } else{
+          getPOSTmsg(details)
+        }
       }
-    },  
-    {urls: ["http://*.icantw.com/*"]},
-    ['requestBody']
-  );
+    })
+  },  
+  {urls: ["http://*.icantw.com/*"]},
+  ['requestBody']
+);
 
-})
+
 // listen to the changes of tab activation
 chrome.tabs.onActiveChanged.addListener(getTabIdandSwitch)
 
@@ -210,4 +266,8 @@ var popupPostTriggerFunc = function(msg) {
   if((msgFromPopup.bossWarTimerCalledFlag) & msgFromPopup.bossWarTimerCalledFlag == 1) {
     bossWar(msgFromPopup);
   }
+  if((msgFromPopup.nwlCalledFlag) & msgFromPopup.nwlCalledFlag == 1){
+    nwl(msgFromPopup);
+  }
+
 }; 

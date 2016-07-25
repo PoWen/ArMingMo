@@ -105,105 +105,105 @@ https://visualhunt.com/
 
 
 // on login
-{"act":"Login.serverInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Login.login","body":"{\"loginCode\":\"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9\",\"type\":\"WEB_BROWSER\"}"}
-{"act":"Platform.getPlatformInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Player.getProperties","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Hero.getPlayerHeroList","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"System.ping","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9","body":"{\"clientTime\":\"1463809742905\"}"}
-{"act":"City.getPlayerCityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Corps.getJoinedCorps","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Player.getSpecialState","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"NationalWar.getMyTroops","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Major.getMyMajorInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"World.worldSituation","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"NationalWar.acquireCityCommandInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"World.getCityRewardInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"World.getAllOpenedCities","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"World.getExploredWorldArea","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Bag.getBagInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"NpcCorps.getNpcWars","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Naval.getInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"BossWar.openInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"World.getCityChapterBlueprint","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Task.getAchievementInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Shop.shopNextRefreshTime","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Shop.otherShopsRefreshTime","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Corps.personIndustryRefresh","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.drawCompanyAnniversaryRechargeReward","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.drawCompanyAnniversaryLoginReward","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"StarGazing.myFirecrackerInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"StarGazing.activityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Firecracker.myFirecrackerInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Firecracker.activityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"GmActivity.superPackageInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"OneYear.cityStatus","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"LordGodUp.getDispInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.getCloudSellerInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Shop.getShuangShiyiShopInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Archery.archeryOpenInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9","body":"{\"type\":\"NORMAL\"}"}
-{"act":"Activity.showIconForServerOpenActivity","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.serverOpenTime","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"VipAuthentication.isGotMobileGift","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.getPlayerGoBackActivityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Lottery.openLottery","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"SignInReward.getInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Valentine.getActivityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"DaqiaoActivity.getCurrActivityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9","body":"{\"type\":3}"}
-{"act":"DaqiaoActivity.getCurrActivityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9","body":"{\"type\":2}"}
-{"act":"DaqiaoActivity.getCurrActivityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9","body":"{\"type\":1}"}
-{"act":"Hero.getCurrRecommendActivityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"YunYou.getYunYouInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"BaiGuanYu.getTimeInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.getActivityList","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Vip.monthCard","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Vip.firstChargeInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.getBookHeroInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"RedEnvelope.activityTime","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"WelfareLottery.time","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"ChristmasTree.time","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"ZaJinDan.getTimeInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.getShuangShiyiActivityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Pray.getPrayTime","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"World.citySituationDetail","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9","body":"{\"cityId\":1}"}
-{"act":"World.citySituationDetail","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9","body":"{\"cityId\":36}"}
-{"act":"Patrol.getPatrolInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Country.viewCountry","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Country.corpsCountry","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Campaign.eliteGetAllInfos","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Campaign.getLeftTimes","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Campaign.getTrialsInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Login.loginFinish","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"World.getAllTransportingUnits","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"CrossCamp.getInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Login.getOfflineConpensate","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Vip.monthCard","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.getAnnouncement","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Email.openInBox","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Corps.getCorpsMessageNum","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Drama.getDramaInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.drawExchangeHoliday","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.getTuanGouOpenInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Task.getTaskTraceInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Shop.shopNextRefreshTime","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Travel.getStatus","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"TeamDuplicate.teamDuplicateFreeTimes","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.getRationActivity","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Hero.getFeastInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Hero.getWineInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Emperor.isFloat","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Gamble.chouqianOpenInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Manor.getManorInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Notice.queryAllMarqueeMessage","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"NorthMarch.northCitySituation","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.drawStrategicFundInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.getRankInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Corps.takeZhanjiStep","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"CrossCamp.getJackpotInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"Activity.getRedPointActivityInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9","body":"{\"types\":[\"UPGRADE_REWARD\",\"TUNGOU_REWARD\"]}"}
-{"act":"Hero.getFeastInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"RewardActivity.getSevenDayFundRewardInfo","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9"}
-{"act":"System.ping","sid":"a81c843e717d47e8a29178cf6dbcc6fe5d55c9a9","body":"{\"clientTime\":\"1463809748641\"}"}
+{"act":"Login.serverInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Login.login","body":"{\"loginCode\":\"f707ca4616d8ec06b5308e2b1789990b752227f8\",\"type\":\"WEB_BROWSER\"}"}
+{"act":"Platform.getPlatformInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Player.getProperties","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 
+{"act":"Hero.getPlayerHeroList","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 英雄列表
+{"act":"System.ping","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8","body":"{\"clientTime\":\"1463809742905\"}"}
+{"act":"City.getPlayerCityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 你在大地圖哪裡
+{"act":"Corps.getJoinedCorps","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 你的勢力資訊
+{"act":"Player.getSpecialState","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 閒置
+{"act":"NationalWar.getMyTroops","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 正在國戰部隊
+{"act":"Major.getMyMajorInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 太守資訊
+{"act":"World.worldSituation","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 所有城市資訊(太守 勢力範圍)
+{"act":"NationalWar.acquireCityCommandInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} 
+{"act":"World.getCityRewardInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 城鎮獎勵
+{"act":"World.getAllOpenedCities","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"World.getExploredWorldArea","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Bag.getBagInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 倉庫資訊
+{"act":"NpcCorps.getNpcWars","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} 
+{"act":"Naval.getInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 跨服戰役資訊
+{"act":"BossWar.openInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 神將無雙資訊
+{"act":"World.getCityChapterBlueprint","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Task.getAchievementInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} // 加官品資訊
+{"act":"Shop.shopNextRefreshTime","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"} 
+{"act":"Shop.otherShopsRefreshTime","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Corps.personIndustryRefresh","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.drawCompanyAnniversaryRechargeReward","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.drawCompanyAnniversaryLoginReward","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"StarGazing.myFirecrackerInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"StarGazing.activityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Firecracker.myFirecrackerInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Firecracker.activityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"GmActivity.superPackageInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"OneYear.cityStatus","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"LordGodUp.getDispInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.getCloudSellerInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Shop.getShuangShiyiShopInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Archery.archeryOpenInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8","body":"{\"type\":\"NORMAL\"}"}
+{"act":"Activity.showIconForServerOpenActivity","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.serverOpenTime","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"VipAuthentication.isGotMobileGift","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.getPlayerGoBackActivityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Lottery.openLottery","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"SignInReward.getInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Valentine.getActivityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"DaqiaoActivity.getCurrActivityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8","body":"{\"type\":3}"}
+{"act":"DaqiaoActivity.getCurrActivityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8","body":"{\"type\":2}"}
+{"act":"DaqiaoActivity.getCurrActivityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8","body":"{\"type\":1}"}
+{"act":"Hero.getCurrRecommendActivityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"YunYou.getYunYouInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"BaiGuanYu.getTimeInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.getActivityList","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Vip.monthCard","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Vip.firstChargeInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.getBookHeroInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"RedEnvelope.activityTime","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"WelfareLottery.time","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"ChristmasTree.time","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"ZaJinDan.getTimeInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.getShuangShiyiActivityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Pray.getPrayTime","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"World.citySituationDetail","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8","body":"{\"cityId\":1}"}
+{"act":"World.citySituationDetail","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8","body":"{\"cityId\":36}"}
+{"act":"Patrol.getPatrolInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Country.viewCountry","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Country.corpsCountry","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Campaign.eliteGetAllInfos","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Campaign.getLeftTimes","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Campaign.getTrialsInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Login.loginFinish","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"World.getAllTransportingUnits","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"CrossCamp.getInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Login.getOfflineConpensate","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Vip.monthCard","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.getAnnouncement","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Email.openInBox","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Corps.getCorpsMessageNum","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Drama.getDramaInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.drawExchangeHoliday","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.getTuanGouOpenInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Task.getTaskTraceInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Shop.shopNextRefreshTime","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Travel.getStatus","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"TeamDuplicate.teamDuplicateFreeTimes","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.getRationActivity","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Hero.getFeastInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Hero.getWineInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Emperor.isFloat","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Gamble.chouqianOpenInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Manor.getManorInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Notice.queryAllMarqueeMessage","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"NorthMarch.northCitySituation","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.drawStrategicFundInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.getRankInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Corps.takeZhanjiStep","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"CrossCamp.getJackpotInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"Activity.getRedPointActivityInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8","body":"{\"types\":[\"UPGRADE_REWARD\",\"TUNGOU_REWARD\"]}"}
+{"act":"Hero.getFeastInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"RewardActivity.getSevenDayFundRewardInfo","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+{"act":"System.ping","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8","body":"{\"clientTime\":\"1463809748641\"}"}
 
 
 // 軍府
@@ -319,7 +319,45 @@ http://kingres.icantw.com/snres/res/ui/activity/archery_118211.bin?v=1461295399%
 {"act":"Country.officialInfo","sid":"8d4b6f372ff955e71253c0d222cbf318de667f93","body":"{\"countryId\":4}"}:
 :{"step":3,"official":[{"officialTypeId":2,"playerName":"æ²å¿ƒæ¶¼","icon":1100010,"grantedCount":0},{"officialTypeId":7,"playerName":"ä¿®ç½—æµ·ç¥ž.S35","icon":100021,"grantedCount":1},{"officialTypeId":3,"playerName":"å°„æ‰‹é¢¨æƒ…","icon":1100072,"grantedCount":1},{"officialTypeId":8,"playerName":"å­é¾","icon":1100068,"grantedCount":1},{"officialTypeId":5,"playerName":"æˆéƒ½ç«¯æœ¨å”æ˜Ž.S35","icon":1100010,"grantedCount":1},{"officialTypeId":9,"playerName":"çµ•å¼¦","icon":1100001,"grantedCount":1},{"officialTypeId":1,"playerName":"è¥¿æ¥šéœ¸çŽ‹.S35","icon":1100020,"grantedCount":0},{"officialTypeId":4,"playerName":"é€™å°±æ˜¯äººç”Ÿ","icon":1100010,"grantedCount":1},{"officialTypeId":6,"playerName":"å¤©é¦¬åº§","icon":100023,"grantedCount":1}]}
 
+{"act":"Country.dismissOfficial","sid":"8d4b6f372ff955e71253c0d27fe09e30980e1ad0","body":"{\"officialIndex\":2}"}:
 
+
+
+
+// 大營資訊
+'{"act":"NationalWar.getCorpsReserveTroops","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8","body":"{\'city\':0}"}'
+serverInfo.trps[0].nm // user name
+serverInfo.trps[0].uid // troopsId
+
+
+{"act":"Player.getProperties","sid":"f707ca4616d8ec06b5308e2b1789990b752227f8"}
+serverInfo.pvs[14].p // "CORPS_NAME"
+serverInfo.pvs[14].v //"拓和團.S35"
+
+{"act":"Login.login","body":"{\"loginCode\":\"f707ca4616d8ec06b5308e2b1789990b752227f8\",\"type\":\"WEB_BROWSER\"}"}
+serverInfo.nickName //"成都端木叔明.S35"
+
+
+官職輪值表
+一品 西楚霸王
+二品 沁心涼(呶呶) 天馬座 
+三品 射手風情 這就是人生 成都端木叔明 修羅海神 子龍 絕弦 
+
+一品 西楚霸王
+二品 沁心涼(呶呶) 天馬座
+三品 神龘 夕陽之歌 華英雄 月下 好色仙人 無心亦無情
+
+一品 西楚霸王
+二品 射手風情 這就是人生
+三品 楊蓋兒 阿賀 阿貓 徐州歐陽孔明 玄同 林羽
+
+一品 西楚霸王
+二品 成都端木叔明 修羅海神
+三品 舞動桃 及時雨宋公明 風起雲落 仔仔 托尼托尼喬巴 我用下面
+
+一品 西楚霸王
+二品 子龍 絕弦 
+三品 任文若 天罡 王小杰 康熙再也不來了 阿拉保佑你 人在風城
 
 
 
