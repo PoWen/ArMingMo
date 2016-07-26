@@ -264,9 +264,6 @@ var nwl = function(msgObj) {
   var singleCity = function() {
     var getMyNameCMD = '{"act":"Login.login","body":"{\'loginCode\':\'' + sid + '\',\'type\':\'WEB_BROWSER\'}"}';
     httpPostString( getMyNameCMD, url, getMyTroops);
-
-    var getCityTroops = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + sid + '","body":"{\'city\':0}"}';
-    httpPostString( getCityTroops, url, getMyName);
   }
   
   if (msgObj.nwlCalledFlag ==1){
