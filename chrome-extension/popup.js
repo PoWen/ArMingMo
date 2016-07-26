@@ -85,7 +85,8 @@ var msgToBackground = (localStorage.msgToBackground) ?
                           manorString: '7,6,1,5,2,12,9,8'
                         },
                         tabId: '',
-                        msg: ''
+                        msg: '',
+                        nwlClick: 0
                       };
 
 
@@ -104,7 +105,10 @@ JSON.parse(localStorage.getItem("tabStatus")) :
   manorStatus: 1,// 0: manor off, 1: manor on
   sid: '',
   url: '',
-  bossWarTimerCalledFlag: 0 // 0:not called, 1: called bossWar
+  bossWarTimerCalledFlag: 0, // 0:not called, 1: called bossWar
+  nwlCalledFlag: 0, // 0: not called, 1: call national war loop
+  nwlCityId: '',
+  nwlClick: 0
 }];
 
 
@@ -228,12 +232,21 @@ var myFirstExtFunc = function() {
     renderStatus('阿明謀成功開啟!');
     document.getElementById("ArMingMo-button-area").style.visibility = 'visible';
     document.getElementById("ArMing-status").style.visibility = 'hidden';
+    console.log('manorStatus:' + tabStatus[tabSwitcher].manorStatus);
     if(tabStatus[tabSwitcher].manorStatus == 0) {
       document.getElementById("manor-switch").title = '表人趁現在 一鍵上軍府';
       document.getElementById("manor-switch").style['background-image'] = "url('manorSwitchOff.png')";
     }  else {
       document.getElementById("manor-switch").title = '扮豬吃老虎 就愛下軍府';
       document.getElementById("manor-switch").style['background-image'] = "url('manorSwitch.png')";
+    }
+    console.log('nwlFlag:' + tabStatus[tabSwitcher].nwlCalledFlag);
+    if(tabStatus[tabSwitcher].nwlCalledFlag == 0) {
+      document.getElementById("nwl-single-city").title = '選定要刷的城市編號, 上下軍府連刷單一城市。刷城隊伍從武藝較量隊伍抓取，請到排行榜使用刷城隊伍找人較量。';
+      document.getElementById("nwl-single-city").style['background-image'] = "url('nwl-single-city.png')";
+    }  else {
+      document.getElementById("nwl-single-city").title = '停止刷城, 整裝待發!';
+      document.getElementById("nwl-single-city").style['background-image'] = "url('nwl-single-city-off.gif')";
     }
   } else {
     renderStatus('請點擊主公頭像');
@@ -637,6 +650,38 @@ var starThree = function() {
 //   }
 // }
 
+
+var nwlSingleCity = function() {
+    if (tabStatus[tabSwitcher].nwlCalledFlag == 0) {
+      // change nwl Status
+      tabStatus[tabSwitcher].nwlCalledFlag = 1;
+      tabStatus[tabSwitcher].nwlCityId = document.getElementById("nwl-city-id").value;
+      // post the timer trigger of bossWar to background
+      var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
+      localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+      tabStatus[tabSwitcher].nwlClick = 1;
+      postToBg(JSONstr);  
+      document.getElementById("nwl-single-city").title = '您累了嗎? 無米不樂嗎? 停止刷城';
+      document.getElementById("nwl-single-city").style['background-image'] = "url('nwl-single-city-off.gif')";
+      renderStatus('刷刷刷~~ 刷到天荒地老');
+
+    } else if (tabStatus[tabSwitcher].nwlCalledFlag == 1) {
+      // change nwl Status
+      tabStatus[tabSwitcher].nwlCalledFlag = 0;
+      // tabStatus[tabSwitcher].nwlCityId = document.getElementById("nwl-city-id").value;
+
+      var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
+      localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+      tabStatus[tabSwitcher].nwlClick = 1;
+      postToBg(JSONstr);  
+      
+      document.getElementById("nwl-single-city").title = '選定要刷的城市編號, 上下軍府連刷單一城市。刷城隊伍從武藝較量隊伍抓取，請到排行榜使用刷城隊伍找人較量。';
+      document.getElementById("nwl-single-city").style['background-image'] = "url('nwl-single-city.png')";
+      renderStatus('停止刷城, 整裝待發!')
+    }
+  
+}
+
 // ----------------------------------------------------------------------------------
 
 // # View render --------------------------------------------------------------------
@@ -701,6 +746,10 @@ document.addEventListener('DOMContentLoaded', function() {
       tabStatus[tabSwitcher] = {};
       tabStatus[tabSwitcher].tabId = id;
       tabStatus[tabSwitcher].manorString = '7,6,1,5,2,12,9,8';
+      tabStatus[tabSwitcher].manorStatus = 1;// 0: manor off, 1: manor on
+      tabStatus[tabSwitcher].nwlCalledFlag = 0; // 0: not called, 1: call national war loop
+      tabStatus[tabSwitcher].nwlCityId = '';
+      tabStatus[tabSwitcher].nwlClick = 0;
     }
 
     
@@ -728,5 +777,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('star-detect').addEventListener('click', starDetect); // Star detect
   document.getElementById('star-get').addEventListener('click', starGet); // Star get
   document.getElementById('star-three').addEventListener('click', starThree); // Star five
+  document.getElementById('nwl-single-city').addEventListener('click', nwlSingleCity); // Star five
 
 });

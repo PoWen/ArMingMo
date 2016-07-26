@@ -42,7 +42,8 @@ var getTabIdandSwitch = function() {
   })
 }
 
-// # Post String to URL and get responses
+// # Mutual functions of background and popup
+// ## Post String to URL and get responses
 // Two kinds of callback:
 // i) responseInfo: print the parsed JSON server response to console
 // ii) getResponseInfo: put the parsed JSON server response into global variable "serverInfo"
@@ -70,6 +71,7 @@ var getResponseInfo = function(responseText) {
   serverInfo = JSON.parse(responseText)
 }
 
+// # Background functions
 // bossWar
 var bossWar = function(msgObj) {
   var sid = msgObj.sid;
@@ -142,14 +144,139 @@ var bossWar = function(msgObj) {
 }
 
 // nwl: national war loop
+var nwloop = [];
 var nwl = function(msgObj) {
-  console.log("nwl called!")
-  var d = 0;
-  var nw = function() {
-    console.log('d:'+ d);
-    d++;
+  console.log("nwl called! Flag:" + msgObj.nwlCalledFlag)
+  var sid = msgObj.sid;
+  var url = msgObj.url;
+  var cityId = msgObj.nwlCityId;
+  var manorSeq = msgObj.manorString;
+  var troopCode;
+  var waitTimeout = 860000;
+  var myName;
+
+  // manor off, need sid 
+  var manorOff = function() {
+    var retireString = function(decId) {
+      strReturn = '{"act":"Manor.retireAll","sid":"' 
+                  + sid
+                  +'","body":"{\'decId\':'
+                  + decId
+                  + '}"}';
+      return strReturn;
+    }
+    var retireArray = [1, 2, 5, 6, 7, 8, 9, 12];
+    var i = 0;  
+    var asycPost = function() {
+      i++;
+      httpPostString(retireString(retireArray[i]), url, (i < retireArray.length-1)? asycPost: function(){});
+    }
+    httpPostString(retireString(retireArray[i]), url, asycPost)
   }
-  var nwloop = setInterval(nw,1000);
+
+
+  // manor on, need sid
+  var manorOn = function() {
+    var autoAppointString = function(decId) {
+      strReturn = '{"act":"Manor.autoAppoint","sid":"' 
+                  + sid
+                  +'","body":"{\'decId\':'
+                  + decId
+                  + '}"}';
+      return strReturn;
+    }
+    
+    appointArray = manorSeq.split(',');
+
+    var i = 0;  
+    var asycPost = function() {
+      i++;
+      httpPostString(autoAppointString(appointArray[i]), url, (i < appointArray.length-1)? asycPost: function(){});
+    }
+    httpPostString(autoAppointString(appointArray[i]), url, asycPost)
+  }
+
+  var getMyTroopsHome = function(responseText) {
+
+    var serverResponse = JSON.parse(responseText);
+    if (serverResponse.trps) {
+      var numOfTroops = serverResponse.trps.length;
+      var nowTroops = 0;
+
+      serverResponse.trps.reduce(function( p, c) { 
+        if ((c.nm) && c.nm == myName) {
+          var getMyTroopsBack = '{"act":"NationalWar.pullBackCorpsReserveTroops","sid":"' + sid + '","body":"{\'uid\':\'' + c.uid + '\'}"}';
+        httpPostString( getMyTroopsBack, url, responseInfo);
+      } 
+      
+      nowTroops++;
+      
+      if (nowTroops >= numOfTroops){
+        setTimeout(sendTroopsWithLittleGrass, 5000);
+      }
+    
+    },[]);  
+    }
+  }
+
+  var sendTroopsWithLittleGrass = function(){
+      var sendTroopsAndMonorOn = function(){
+        var formatTroops = function(responseText) {
+          
+            var enterWarString = '{"act":"NationalWar.enterWar","sid":"' + sid + '","body":"{\'cityId\':' + cityId + '}"}';
+            var chooseSide = function() {
+              var chooseSideString = '{"act":"NationalWar.chooseSide","sid":"' + sid + '","body":"{\'side\':\'LEFT\',\'cityId\':' + cityId + '}"}';
+              var sendTroopFunc = function() {
+                // var ultimateCityTroop = '{"act":"NationalWar.sendTroops","sid":"' + sid + '","body":"{\'save\':'+ troopCode +',\'type\':\'NATIONAL_WAR\',\'cityId\':' + cityId + '}"}';
+                var leaveWar = function() {
+                  var leaveWarString = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityId + '}"}';
+                  httpPostString( leaveWarString, url, manorOn);
+                }
+              httpPostString( ultimateCityTroop, url, leaveWar);        
+              }
+              httpPostString( chooseSideString, url, sendTroopFunc);
+            }
+          
+          
+          serverInfo = JSON.parse(responseText);
+          heroInfo = JSON.stringify(serverInfo.heros);
+          heroInfo = heroInfo.split("\"").join("\'");
+          chief = serverInfo.chief;
+          troopCode = '{\'heros\':' + heroInfo + ',\'chief\':' + chief + '}';
+          var ultimateCityTroop = '{"act":"NationalWar.sendTroops","sid":"' + sid + '","body":"{\'save\':'+ troopCode +',\'type\':\'NATIONAL_WAR\',\'cityId\':' + cityId + '}"}';
+          // troopCode = '{\'heros\':' + heroInfo + ',\'chief\':' + chief + '}"}';
+          httpPostString( enterWarString, url, chooseSide);
+        }
+        var getPKTroops = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'PK\'}"}';
+      httpPostString(getPKTroops , url, formatTroops);
+      } 
+    setTimeout(manorOff,0);  
+    setTimeout(sendTroopsAndMonorOn,10000);
+  }
+
+  var getMyTroops = function(responseText) {
+    var serverResponse = JSON.parse(responseText);
+    myName = serverResponse.nickName;
+    var getMyTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + sid + '","body":"{\'city\':0}"}'
+    httpPostString( getMyTroopsCMD, url, getMyTroopsHome)
+  }
+
+  var singleCity = function() {
+    var getMyNameCMD = '{"act":"Login.login","body":"{\'loginCode\':\'' + sid + '\',\'type\':\'WEB_BROWSER\'}"}';
+    httpPostString( getMyNameCMD, url, getMyTroops);
+
+    var getCityTroops = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + sid + '","body":"{\'city\':0}"}';
+    httpPostString( getCityTroops, url, getMyName);
+  }
+  
+  if (msgObj.nwlCalledFlag ==1){
+    console.log('開始刷城循環')
+    singleCity();
+    nwloop[tabSwitcher] = setInterval(singleCity,waitTimeout);
+  } else {
+    console.log('結束刷城循環')
+    clearInterval(nwloop[tabSwitcher]);
+  }
 }
 
 // End of global functions ---------------------------------------------------------
@@ -216,6 +343,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       }  
     }
     getCurrentTabId(function(id){
+      console.log('id here:' + id);
       if (!msgToPopup[tabSwitcher].tabId) {
         msgToPopup[tabSwitcher].tabId = id;
         console.log('find new tab, tabId:',id);
@@ -266,8 +394,7 @@ var popupPostTriggerFunc = function(msg) {
   if((msgFromPopup.bossWarTimerCalledFlag) & msgFromPopup.bossWarTimerCalledFlag == 1) {
     bossWar(msgFromPopup);
   }
-  if((msgFromPopup.nwlCalledFlag) & msgFromPopup.nwlCalledFlag == 1){
+  if (msgFromPopup.nwlClick) {
     nwl(msgFromPopup);
   }
-
 }; 
