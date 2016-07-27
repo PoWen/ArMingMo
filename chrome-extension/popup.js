@@ -108,7 +108,8 @@ JSON.parse(localStorage.getItem("tabStatus")) :
   bossWarTimerCalledFlag: 0, // 0:not called, 1: called bossWar
   nwlCalledFlag: 0, // 0: not called, 1: call national war loop
   nwlCityId: '',
-  nwlClick: 0
+  nwlClick: 0,
+  nwlTimeout: 860
 }];
 
 
@@ -656,6 +657,7 @@ var nwlSingleCity = function() {
       // change nwl Status
       tabStatus[tabSwitcher].nwlCalledFlag = 1;
       tabStatus[tabSwitcher].nwlCityId = document.getElementById("nwl-city-id").value;
+      tabStatus[tabSwitcher].nwlTimeout = document.getElementById("nwl-timeout").value;
       // post the timer trigger of bossWar to background
       var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
       localStorage.setItem('tabStatus',JSON.stringify(tabStatus));

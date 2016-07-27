@@ -152,7 +152,7 @@ var nwl = function(msgObj) {
   var cityId = msgObj.nwlCityId;
   var manorSeq = msgObj.manorString;
   var troopCode;
-  var waitTimeout = 860000;
+  var waitTimeout = Number(msgObj.nwlTimeout)*1000;
   var myName;
 
   // manor off, need sid 
