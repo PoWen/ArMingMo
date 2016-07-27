@@ -146,6 +146,7 @@ var bossWar = function(msgObj) {
 // nwl: national war loop
 var nwloop = [];
 var nwl = function(msgObj) {
+  
   console.log("nwl called! Flag:" + msgObj.nwlCalledFlag)
   var sid = msgObj.sid;
   var url = msgObj.url;
@@ -173,7 +174,6 @@ var nwl = function(msgObj) {
     }
     httpPostString(retireString(retireArray[i]), url, asycPost)
   }
-
 
   // manor on, need sid
   var manorOn = function() {
@@ -220,38 +220,56 @@ var nwl = function(msgObj) {
   }
 
   var sendTroopsWithLittleGrass = function(){
-      var sendTroopsAndMonorOn = function(){
-        var formatTroops = function(responseText) {
-          
-            var enterWarString = '{"act":"NationalWar.enterWar","sid":"' + sid + '","body":"{\'cityId\':' + cityId + '}"}';
-            var chooseSide = function() {
-              var chooseSideString = '{"act":"NationalWar.chooseSide","sid":"' + sid + '","body":"{\'side\':\'LEFT\',\'cityId\':' + cityId + '}"}';
-              var sendTroopFunc = function() {
-                // var ultimateCityTroop = '{"act":"NationalWar.sendTroops","sid":"' + sid + '","body":"{\'save\':'+ troopCode +',\'type\':\'NATIONAL_WAR\',\'cityId\':' + cityId + '}"}';
-                var leaveWar = function() {
-                  var leaveWarString = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityId + '}"}';
-                  httpPostString( leaveWarString, url, manorOn);
-                }
-              httpPostString( ultimateCityTroop, url, leaveWar);        
-              }
-              httpPostString( chooseSideString, url, sendTroopFunc);
-            }
-          
-          
-          serverInfo = JSON.parse(responseText);
-          heroInfo = JSON.stringify(serverInfo.heros);
-          heroInfo = heroInfo.split("\"").join("\'");
-          chief = serverInfo.chief;
-          troopCode = '{\'heros\':' + heroInfo + ',\'chief\':' + chief + '}';
-          var ultimateCityTroop = '{"act":"NationalWar.sendTroops","sid":"' + sid + '","body":"{\'save\':'+ troopCode +',\'type\':\'NATIONAL_WAR\',\'cityId\':' + cityId + '}"}';
-          // troopCode = '{\'heros\':' + heroInfo + ',\'chief\':' + chief + '}"}';
-          httpPostString( enterWarString, url, chooseSide);
+    var citySituationCMD = '{"act":"World.citySituationDetail","sid":"' + sid + '","body":"{\'cityId\':' + cityId + '}"}';
+    var fieldDetect = function(responseText) {
+      var serverInfo = JSON.parse(responseText);
+      if (serverInfo.rAtt == 0 ){
+        var ifMyTroopThere = function(responseText) {
+          var serverResponse = JSON.parse(responseText);
+          console.log('serverResponse')
+          console.log(serverResponse)
+          if (serverResponse.disp.myTroops && serverResponse.disp.myTroops == '') {
+            setTimeout(manorOff,0);  
+            setTimeout(sendTroopsAndMonorOn,10000);  
+          } else {
+            var leaveWarString = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityId + '}"}';
+            httpPostString( leaveWarString, url, function(){});
+          }
         }
-        var getPKTroops = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'PK\'}"}';
-      httpPostString(getPKTroops , url, formatTroops);
-      } 
-    setTimeout(manorOff,0);  
-    setTimeout(sendTroopsAndMonorOn,10000);
+
+          
+        var sendTroopsAndMonorOn = function(){
+          var formatTroops = function(responseText) {
+            serverInfo = JSON.parse(responseText);
+            heroInfo = JSON.stringify(serverInfo.heros);
+            heroInfo = heroInfo.split("\"").join("\'");
+            chief = serverInfo.chief;
+            troopCode = '{\'heros\':' + heroInfo + ',\'chief\':' + chief + '}';
+            var ultimateCityTroop = '{"act":"NationalWar.sendTroops","sid":"' + sid + '","body":"{\'save\':'+ troopCode +',\'type\':\'NATIONAL_WAR\',\'cityId\':' + cityId + '}"}';
+            // troopCode = '{\'heros\':' + heroInfo + ',\'chief\':' + chief + '}"}';
+            var sendTroopFunc = function() {
+                // var ultimateCityTroop = '{"act":"NationalWar.sendTroops","sid":"' + sid + '","body":"{\'save\':'+ troopCode +',\'type\':\'NATIONAL_WAR\',\'cityId\':' + cityId + '}"}';
+              var leaveWar = function() {
+                var leaveWarString = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityId + '}"}';
+                httpPostString( leaveWarString, url, manorOn);
+              }
+
+              httpPostString( ultimateCityTroop, url, leaveWar);
+
+            }
+            var chooseSideString = '{"act":"NationalWar.chooseSide","sid":"' + sid + '","body":"{\'side\':\'LEFT\',\'cityId\':' + cityId + '}"}';
+            httpPostString( chooseSideString, url, sendTroopFunc);
+          }          
+          var getPKTroops = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'PK\'}"}';
+          httpPostString(getPKTroops , url, formatTroops);
+        } 
+          
+        
+        var enterWarString = '{"act":"NationalWar.enterWar","sid":"' + sid + '","body":"{\'cityId\':' + cityId + '}"}';
+        httpPostString(enterWarString,url,ifMyTroopThere)        
+      }      
+    }
+    httpPostString(citySituationCMD,url,fieldDetect)
   }
 
   var getMyTroops = function(responseText) {
