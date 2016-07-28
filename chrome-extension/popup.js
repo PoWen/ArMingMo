@@ -651,7 +651,7 @@ var starThree = function() {
 //   }
 // }
 
-
+// 單城循環連刷
 var nwlSingleCity = function() {
     if (tabStatus[tabSwitcher].nwlCalledFlag == 0) {
       // change nwl Status
@@ -680,8 +680,24 @@ var nwlSingleCity = function() {
       document.getElementById("nwl-single-city").title = '選定要刷的城市編號, 上下軍府連刷單一城市。刷城隊伍從武藝較量隊伍抓取，請到排行榜使用刷城隊伍找人較量。';
       document.getElementById("nwl-single-city").style['background-image'] = "url('nwl-single-city.png')";
       renderStatus('停止刷城, 整裝待發!')
+    }  
+}
+
+// 玩家偵測
+
+var playerDetect = function() {
+  var playerResponseInfo = function(responseText) {
+    var playerInfo = JSON.parse(responseText);
+    if (playerInfo.nickName) {
+      renderStatus('偵測到玩家:' + playerInfo.nickName);
+    } else {
+      renderStatus('偵測不到任何玩家, 請看看你的背後...');
     }
-  
+
+  }
+  var playerDetectStr = '{"act":"Login.login","body":"{\'loginCode\':\'' + tabStatus[tabSwitcher].sid + '\',\'type\':\'WEB_BROWSER\'}"}';
+  httpPostString(playerDetectStr, tabStatus[tabSwitcher].url, playerResponseInfo)   
+
 }
 
 // ----------------------------------------------------------------------------------
@@ -771,14 +787,16 @@ document.addEventListener('DOMContentLoaded', function() {
   // Listen to button clicks
   document.getElementById('ArMing-status').addEventListener('click', myFirstExtFunc); // ArMing connect
   document.getElementById('manor-switch').addEventListener('click', manorSwitch); // Switch the manor to tune your power
-  document.getElementById('roulette').addEventListener('click', roulette); // Roulette
+  document.getElementById('nwl-single-city').addEventListener('click', nwlSingleCity); // Star five
+  document.getElementById('player-detect').addEventListener('click', playerDetect); // player detect
   document.getElementById('manor-detect').addEventListener('click', manorDetect); // Detect the earned manor
+  document.getElementById('roulette').addEventListener('click', roulette); // Roulette
   document.getElementById('grass-man').addEventListener('click', grassMan); // Earn money from grass-man
   document.getElementById('boss-war').addEventListener('click', bossWar); // Boss-war
   document.getElementById('one-archery').addEventListener('click', oneArchery); // Archery
   document.getElementById('star-detect').addEventListener('click', starDetect); // Star detect
   document.getElementById('star-get').addEventListener('click', starGet); // Star get
   document.getElementById('star-three').addEventListener('click', starThree); // Star five
-  document.getElementById('nwl-single-city').addEventListener('click', nwlSingleCity); // Star five
+  
 
 });
