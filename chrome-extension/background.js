@@ -223,7 +223,8 @@ var nwl = function(msgObj) {
     var citySituationCMD = '{"act":"World.citySituationDetail","sid":"' + sid + '","body":"{\'cityId\':' + cityId + '}"}';
     var fieldDetect = function(responseText) {
       var serverInfo = JSON.parse(responseText);
-      if (serverInfo.rAtt == 0 ){
+      var d = new Date();
+      if (serverInfo.rAtt == 0 && d.getHours()>8 && d.getHours()<24){
         var ifMyTroopThere = function(responseText) {
           var serverResponse = JSON.parse(responseText);
           console.log('serverResponse')
@@ -267,7 +268,14 @@ var nwl = function(msgObj) {
         
         var enterWarString = '{"act":"NationalWar.enterWar","sid":"' + sid + '","body":"{\'cityId\':' + cityId + '}"}';
         httpPostString(enterWarString,url,ifMyTroopThere)        
-      }      
+      } else {
+        if (serverInfo.rAtt != 0){
+          console.log("已啟動, 但城市有玩家守軍");
+        } else {
+          console.log("已啟動, 9:00 ~ 23:00 將正常運作")
+        }
+
+      }     
     }
     httpPostString(citySituationCMD,url,fieldDetect)
   }
