@@ -98,6 +98,8 @@ byPower.sort(function(a,b) {
 packingTroops.trps = byPower;
 
 
+{"act":"NationalWar.useReserveTroops","sid":"f707ca4616d8ec06b5308e2b81446a57a3c15762","body":"{\"trpIds\":[\"215116\",\"215115\"],\"city\":104}"}
+
 '{"act":"NationalWar.enterWar","sid":"f707ca4616d8ec06b5308e2bcb0ec73ee4cc1fe6","body":"{\'cityId\':113}"}'
 '{"act":"NationalWar.getCorpsReserveTroops","sid":"f707ca4616d8ec06b5308e2bcb0ec73ee4cc1fe6","body":"{\'city\':105}"}'
 

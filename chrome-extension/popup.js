@@ -683,6 +683,14 @@ var nwlSingleCity = function() {
     }  
 }
 
+var sendByPowerRange = function() {
+  var sprCity = document.getElementById("spr-city-id").value;
+  var sprUpperBoundary = document.getElementById("spr-ub").value;
+  var sprLowerBoundary = document.getElementById("spr-lb").value;
+  var getTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'city\':' + sprCity + '}"}';
+  
+}
+
 // 玩家偵測
 
 var playerDetect = function() {
@@ -787,7 +795,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Listen to button clicks
   document.getElementById('ArMing-status').addEventListener('click', myFirstExtFunc); // ArMing connect
   document.getElementById('manor-switch').addEventListener('click', manorSwitch); // Switch the manor to tune your power
-  document.getElementById('nwl-single-city').addEventListener('click', nwlSingleCity); // Star five
+  document.getElementById('nwl-single-city').addEventListener('click', nwlSingleCity); // national war loop
+  document.getElementById('send-by-power-range').addEventListener('click', sendByPowerRange); // send by power range
   document.getElementById('player-detect').addEventListener('click', playerDetect); // player detect
   document.getElementById('manor-detect').addEventListener('click', manorDetect); // Detect the earned manor
   document.getElementById('roulette').addEventListener('click', roulette); // Roulette
