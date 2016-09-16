@@ -49,11 +49,13 @@
   </head>
 
   <body>
-    <div><textarea class="top-area" id="status" cols=20 rows=3></textarea></div>
-    <div>
+    <div id="ArMingMo-password-area">請輸入密碼: <input type="text" id="password" /> <button id="Fake-auth">送出</button></div>
+    <div id="ArMingMo-status-area" style="visibility: hidden"><textarea class="top-area" id="status" cols=20 rows=3></textarea>
       <br>
       <br>
-      <button id="ArMing-status">確認阿明謀狀態</button>
+      <div>
+        <button id="ArMing-status">確認阿明謀狀態</button>
+      </div>
     </div>
     <div id="ArMingMo-button-area" style="visibility: hidden">
       <button id="manor-switch"  style="width:39px;height:39px;background-image:url('manorSwitch.png');" title="扮豬吃老虎 就愛下軍府"></button>軍府切換<br>
@@ -63,7 +65,11 @@
       目標城市: <input id="nwl-city-id" type="text" value="" style="width: 40px;" />
       重複秒數: <input id="nwl-timeout" type="text" value="20" style="width: 40px;" />
       <br>
-      <button id="send-by-power-range"  style="width:39px;height:39px;background-image:url('nwl-single-city.png');" title="設定派兵戰力的上下限與目標城市, 阿明幫你一鍵派出。還有，想猜猜這個功能命名的梗嗎? 請投稿到阿明信箱, 謝謝~"></button><a href="https://goo.gl/QJDfMV" target="_blank" title="新開分頁看cityId">金剛戰士</a><br>
+      <button id="multi-city-fire"  style="width:39px;height:39px;background-image:url('multi-city-fire.png');" title="選定要放兵的城市編號, 以逗點隔開, 將會一鍵對所有指定城市從大營派兵一隊。隊伍過多按鈕偏移時, 請壓 tab 鍵。"></button><a href="https://goo.gl/QJDfMV" target="_blank" title="新開分頁看cityId">烽火連天</a><br>
+      目標城市: <br>
+      <input id="mcf-city-id" type="text" value="" />
+      <br>
+      <button id="send-by-power-range"  style="width:39px;height:39px;background-image:url('war-declare.png');" title="設定派兵戰力的上下限與目標城市, 阿明幫你一鍵派出。還有，想猜猜這個功能命名的梗嗎? 請投稿到阿明信箱, 謝謝~"></button><a href="https://goo.gl/QJDfMV" target="_blank" title="新開分頁看cityId">金剛戰士</a><br>
       目標城市: <input id="spr-city-id" type="text" value="" style="width: 40px;" />
       戰力上限: <input id="spr-ub" type="text" style="width: 40px;" />
       戰力下限: <input id="spr-lb" type="text" style="width: 40px;" />

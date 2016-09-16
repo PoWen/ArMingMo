@@ -109,7 +109,8 @@ JSON.parse(localStorage.getItem("tabStatus")) :
   nwlCalledFlag: 0, // 0: not called, 1: call national war loop
   nwlCityId: '',
   nwlClick: 0,
-  nwlTimeout: 860
+  nwlTimeout: 860,
+  password: ''
 }];
 
 
@@ -226,9 +227,31 @@ var manorOn = function() {
 }
 
 // # Controls: Popup trigger background 
+// fake auth
+var fakeAuth = function() {
+
+  console.log(tabStatus[tabSwitcher].password);
+  var password = (document.getElementById('password').value) ? (document.getElementById('password').value) : tabStatus[tabSwitcher].password;
+  tabStatus[tabSwitcher].password = password;
+  localStorage.setItem("tabStatus", JSON.stringify(tabStatus));
+  
+  if(passwordCheck(password)) {
+    document.getElementById("ArMingMo-password-area").style.height = '0px';
+    document.getElementById("ArMingMo-status-area").style.visibility = 'visible';
+    document.getElementById("ArMingMo-password-area").style.visibility = 'hidden';  
+  } else {
+    document.getElementById('password').value = "密碼錯了喔"
+  }
+}
+
+var passwordCheck = function(password) {
+  return (password == "nowdahowbunbun") ? 1 : 0 
+}
+
 // My first function for chrome extension: Check the ArMingMo status to open the whole popup
 var myFirstExtFunc = function() {
   console.log('listened!')
+
   if(tabStatus[tabSwitcher].sid){
     renderStatus('阿明謀成功開啟!');
     document.getElementById("ArMingMo-button-area").style.visibility = 'visible';
@@ -651,6 +674,28 @@ var starThree = function() {
 //   }
 // }
 
+var multiCityFire = function() {
+  var mcfCityArray = document.getElementById("mcf-city-id").value.split(',');
+  var getTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'city\':' + mcfCityArray[0] + '}"}'  
+
+  var sortAndSend = function(responseText) {
+    var corpsTroopsInfo = JSON.parse(responseText);
+    var byPower = corpsTroopsInfo.trps.slice(0);
+    byPower.sort(function(a,b) {
+      return a.power - b.power;
+    });
+    
+    for (i=0; i<mcfCityArray.length; i++) {
+      var troopIdString = '\'trpIds\':[' + byPower[i].uid + '],';
+      var useReserveTroopsCMD = '{"act":"NationalWar.useReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{' + troopIdString + '\'city\':' + mcfCityArray[i] + '}"}';
+      statusString = '派兵:' + mcfCityArray[i];
+      renderStatus(statusString);
+      httpPostString(useReserveTroopsCMD,tabStatus[tabSwitcher].url,function(){renderStatus('已派兵');});
+    }
+  } 
+  httpPostString(getTroopsCMD,tabStatus[tabSwitcher].url,sortAndSend)
+}  
+  
 // 單城循環連刷
 var nwlSingleCity = function() {
     if (tabStatus[tabSwitcher].nwlCalledFlag == 0) {
@@ -688,6 +733,24 @@ var sendByPowerRange = function() {
   var sprUpperBoundary = document.getElementById("spr-ub").value;
   var sprLowerBoundary = document.getElementById("spr-lb").value;
   var getTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'city\':' + sprCity + '}"}';
+  var sortAndSend = function(responseText) {
+    var corpsTroopsInfo = JSON.parse(responseText);
+    var byPower = corpsTroopsInfo.trps.slice(0);
+    byPower.sort(function(a,b) {
+      return a.power - b.power;
+    });
+    var troopIdString = '\'trpIds\':[';
+    for (i=0; i<byPower.length; i++) {
+      if (byPower[i].power<=sprUpperBoundary && byPower[i].power >= sprLowerBoundary){
+        troopIdString = troopIdString + '\'' + byPower[i].uid + '\',';
+      }
+    }
+    troopIdString = troopIdString.slice(0,troopIdString.length-1);
+    troopIdString = troopIdString + '],';
+    var useReserveTroopsCMD = '{"act":"NationalWar.useReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{' + troopIdString + '\'city\':' + sprCity + '}"}';
+    httpPostString(useReserveTroopsCMD,tabStatus[tabSwitcher].url,function(){renderStatus('已派兵!');});
+  }
+  httpPostString(getTroopsCMD,tabStatus[tabSwitcher].url,sortAndSend)
   
 }
 
@@ -776,6 +839,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tabStatus[tabSwitcher].nwlCalledFlag = 0; // 0: not called, 1: call national war loop
       tabStatus[tabSwitcher].nwlCityId = '';
       tabStatus[tabSwitcher].nwlClick = 0;
+      tabStatus[tabSwitcher].password = '';
     }
 
     
@@ -783,18 +847,28 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('seq-of-manor-on').value = tabStatus[tabSwitcher].manorString;
 
     // Check ArMingMo at correct Tab
-    if(tabSwitcher == pastTabSwitcher){
-      myFirstExtFunc();
-    } else {
-      renderStatus('請先點擊主公頭像!');
-      console.log(msgFromBackground)
+    if(passwordCheck(tabStatus[tabSwitcher].password)){
+      document.getElementById("ArMingMo-status-area").style.visibility = 'visible';
+      document.getElementById("ArMingMo-password-area").style.visibility = 'hidden';  
+      document.getElementById("ArMingMo-password-area").style.height = '0px';
+      if(tabSwitcher == pastTabSwitcher){
+        myFirstExtFunc();
+      } else {
+        renderStatus('請先點擊主公頭像!');
+        console.log(msgFromBackground)
+      }  
     }
+    
   })
 
-
+  // if(tabStatus[tabSwitcher].password) {
+  //   fakeAuth()
+  // };
   // Listen to button clicks
+  document.getElementById('Fake-auth').addEventListener('click', fakeAuth); // ArMing connect
   document.getElementById('ArMing-status').addEventListener('click', myFirstExtFunc); // ArMing connect
   document.getElementById('manor-switch').addEventListener('click', manorSwitch); // Switch the manor to tune your power
+  document.getElementById('multi-city-fire').addEventListener('click', multiCityFire); // fire to multi cities
   document.getElementById('nwl-single-city').addEventListener('click', nwlSingleCity); // national war loop
   document.getElementById('send-by-power-range').addEventListener('click', sendByPowerRange); // send by power range
   document.getElementById('player-detect').addEventListener('click', playerDetect); // player detect
