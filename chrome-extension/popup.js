@@ -405,19 +405,19 @@ var grassMan = function() {
       var grassResponse = JSON.parse(responseText);
       if (grassResponse.ok == 1){
         rewardTimes+= 1;
-        var renderGrass = "領取金幣次數:" + rewardTimes;
+        var renderGrass = "領取金券次數:" + rewardTimes;
         renderStatus(renderGrass); 
         httpPostString(grassArrowGold2W,url,grassRewardGold);    
       } else {
-        var renderGrass = "領完囉~ 共領:" + rewardTimes*eachReward + "銀幣，下班!";
+        var renderGrass = "領完囉~ 共領:" + rewardTimes*eachReward + "張金券，快回月球!";
         renderStatus(renderGrass);
       }
     }
     var sid = tabStatus[tabSwitcher].sid;
     var url = tabStatus[tabSwitcher].url;
     var rewardTimes = 0;
-    var eachReward = 20000;
-    var grassArrowGold2W = '{\"act\":\"GrassArrow.exchangeGrassArrow\",\"sid\":\"' + sid + '\",\"body\":\"{\'itemId\':11}\"}';
+    var eachReward = 1;//{"act":"Shop.buyRabbitShopItem","sid":"45fea2aa7301ef8b226348ae1fabf3eb75fb0be1","body":"{\"shopId\":3}"}
+    var grassArrowGold2W = '{\"act\":\"Shop.buyRabbitShopItem\",\"sid\":\"' + sid + '\",\"body\":\"{\'shopId\':3}\"}';
     httpPostString(grassArrowGold2W, url, grassRewardGold)
   } else {
     renderStatus('請點擊主公頭像');
