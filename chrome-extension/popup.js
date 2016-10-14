@@ -454,12 +454,12 @@ var oneArchery = function() {
       }
       var archeryInfo = JSON.parse(responseText);
       var nextShootX = Math.round(archeryInfo.wind*-2/30);
-      var nextShootCMD = '{"act":"Archery.shoot","sid":"' + sid + '","body":"{\'x\':' + nextShootX + ',\'y\':10,\'type\':\'NORMAL\'}"}';
+      var nextShootCMD = '{"act":"Archery.shoot","sid":"' + sid + '","body":"{\'x\':' + nextShootX + ',\'y\':10,\'type\':\'ONEYEAY\'}"}'; //NORMAL
       httpPostString(nextShootCMD,url,showScore);
     }
     var sid = tabStatus[tabSwitcher].sid;
     var url = tabStatus[tabSwitcher].url;
-    var getArcheryInfo = '{"act":"Archery.getArcheryInfo","sid":"' + sid + '","body":"{\'type\':\'NORMAL\'}"}';
+    var getArcheryInfo = '{"act":"Archery.getArcheryInfo","sid":"' + sid + '","body":"{\'type\':\'ONEYEAY\'}"}';//NORMAL
     httpPostString(getArcheryInfo,url,doShoot);
   } else {
     renderStatus('請點擊主公頭像');
@@ -695,6 +695,30 @@ var multiCityFire = function() {
   } 
   httpPostString(getTroopsCMD,tabStatus[tabSwitcher].url,sortAndSend)
 }  
+
+var multiCityFireBig = function() {
+  var mcfCityArray = document.getElementById("mcf-city-id").value.split(',');
+  var getTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'city\':' + mcfCityArray[0] + '}"}'  
+
+  var sortAndSend = function(responseText) {
+    var corpsTroopsInfo = JSON.parse(responseText);
+    var byPower = corpsTroopsInfo.trps.slice(0);
+    byPower.sort(function(a,b) {
+      return a.power - b.power;
+    });
+    
+    for (i=0; i<mcfCityArray.length; i++) {
+      var bigTroopNum = byPower.length - i -1;
+      console.log(bigTroopNum);
+      var troopIdString = '\'trpIds\':[' + byPower[bigTroopNum].uid + '],';
+      var useReserveTroopsCMD = '{"act":"NationalWar.useReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{' + troopIdString + '\'city\':' + mcfCityArray[i] + '}"}';
+      statusString = '派兵:' + mcfCityArray[i];
+      renderStatus(statusString);
+      httpPostString(useReserveTroopsCMD,tabStatus[tabSwitcher].url,function(){renderStatus('已派兵');});
+    }
+  } 
+  httpPostString(getTroopsCMD,tabStatus[tabSwitcher].url,sortAndSend)
+}  
   
 // 單城循環連刷
 var nwlSingleCity = function() {
@@ -770,6 +794,43 @@ var playerDetect = function() {
   httpPostString(playerDetectStr, tabStatus[tabSwitcher].url, playerResponseInfo)   
 
 }
+
+// 偵測觀星圖 變數名稱請再修改
+var myStar = function() {
+  var playerResponseInfo = function(responseText) {
+    var playerInfo = JSON.parse(responseText);
+    console.log(playerInfo.firecrackers[0].id)
+    if (playerInfo.firecrackers) {
+      var crackerNos = '';
+      for(i=0;i<playerInfo.firecrackers.length;i++) {
+        crackerNos = crackerNos + playerInfo.firecrackers[i].id + ',\n'
+      }
+      renderStatus('偵測到星圖: \n' + crackerNos);
+    } else {
+      renderStatus('偵測不到任何星圖, 今天大概是陰天吧...');
+    }
+  }
+  var playerDetectStr = '{"act":"StarGazing.myFirecrackerInfo","sid":"' + tabStatus[tabSwitcher].sid + '"}';
+  httpPostString(playerDetectStr, tabStatus[tabSwitcher].url, playerResponseInfo)   
+}
+
+var yourStar = function() {
+  var playerResponseInfo = function(responseText) {
+    var playerInfo = JSON.parse(responseText);
+    if (playerInfo.ok) {
+      renderStatus('偷星成功');
+    } else {
+      renderStatus('吃到假星圖QQ');
+    }
+  }
+  var starMapNo = document.getElementById('your-star-id').value;
+  var playerDetectStr = '{"act":"StarGazing.litOne","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'id\':\'' + starMapNo + '\'}"}';
+  httpPostString(playerDetectStr, tabStatus[tabSwitcher].url, playerResponseInfo)   
+}
+
+//"{"act":"StarGazing.myFirecrackerInfo","sid":"f707ca4616d8ec06b5308e2b231fc12166420962"}"
+// {"act":"StarGazing.hisFirecrackerInfo","sid":"0bc9d65f55237611df38489cd51fe154a8aa38e8","body":"{\"id\":\"343399815184384700\"}"}
+// {"act":"StarGazing.litOne","sid":"0bc9d65f55237611df38489cd51fe154a8aa38e8","body":"{\"id\":\"343399815184384699\"}"}
 
 // ----------------------------------------------------------------------------------
 
@@ -868,7 +929,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('Fake-auth').addEventListener('click', fakeAuth); // ArMing connect
   document.getElementById('ArMing-status').addEventListener('click', myFirstExtFunc); // ArMing connect
   document.getElementById('manor-switch').addEventListener('click', manorSwitch); // Switch the manor to tune your power
-  document.getElementById('multi-city-fire').addEventListener('click', multiCityFire); // fire to multi cities
+  document.getElementById('multi-city-fire').addEventListener('click', multiCityFire); // fire to multi cities from small
+  document.getElementById('multi-city-fire-big').addEventListener('click', multiCityFireBig); // fire to multi cities from big
   document.getElementById('nwl-single-city').addEventListener('click', nwlSingleCity); // national war loop
   document.getElementById('send-by-power-range').addEventListener('click', sendByPowerRange); // send by power range
   document.getElementById('player-detect').addEventListener('click', playerDetect); // player detect
@@ -880,6 +942,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('star-detect').addEventListener('click', starDetect); // Star detect
   document.getElementById('star-get').addEventListener('click', starGet); // Star get
   document.getElementById('star-three').addEventListener('click', starThree); // Star five
+  document.getElementById('my-star').addEventListener('click', myStar); // Star five
+  document.getElementById('your-star').addEventListener('click', yourStar); // Star five
   
 
 });
