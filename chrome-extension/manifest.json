@@ -3,7 +3,7 @@
 
   "name": "夜就輕輕地來了, 開始阿明謀",
   "description": "This extension supports for playing King",
-  "version": "1.3.0",
+  "version": "1.3.1",
 
   "browser_action": {
     "default_icon": "icon.png",

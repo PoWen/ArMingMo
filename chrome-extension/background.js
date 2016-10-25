@@ -310,7 +310,8 @@ var nwl = function(msgObj) {
 var cityOneOcc = '';
 var cityTwoOcc = '';
 // nwDualLoop: national war Dual loop
-var nwDualLoop = [];
+var nwDualLoopOne = [];
+var nwDualLoopTwo = [];
 var nwlDual = function(msgObj) {
   
   console.log("nwl Dual called! Flag:" + msgObj.nwlDualCalledFlag)
@@ -366,17 +367,44 @@ var nwlDual = function(msgObj) {
     httpPostString(autoAppointString(appointArray[i]), url, asycPost)
   }
 
+  var sendTroopsAndMonorOn = function(armyNo){
+    var ultimateCityTroopOne = '{"act":"NationalWar.sendTroops","sid":"' + sid + '","body":"{\'save\':'+ armyOne +',\'type\':\'NATIONAL_WAR\',\'cityId\':' + cityIdOne + '}"}';
+    var ultimateCityTroopTwo = '{"act":"NationalWar.sendTroops","sid":"' + sid + '","body":"{\'save\':'+ armyTwo +',\'type\':\'NATIONAL_WAR\',\'cityId\':' + cityIdTwo + '}"}';
+    var sendTroopFuncOne = function() {
+      var leaveWarOne = function() {
+        var leaveWarStringOne = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityIdOne + '}"}';
+        httpPostString( leaveWarStringOne, url, manorOn);
+      }
+      httpPostString( ultimateCityTroopOne, url, leaveWarOne);
+    }
+    var sendTroopFuncTwo = function() {
+      var leaveWarTwo = function() {
+        var leaveWarStringTwo = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityIdTwo + '}"}';
+        httpPostString( leaveWarStringTwo, url, manorOn);
+      }
+      httpPostString( ultimateCityTroopTwo, url, leaveWarTwo);
+    }
+    var chooseSideStringOne = '{"act":"NationalWar.chooseSide","sid":"' + sid + '","body":"{\'side\':\'LEFT\',\'cityId\':' + cityIdOne + '}"}';
+    var chooseSideStringTwo = '{"act":"NationalWar.chooseSide","sid":"' + sid + '","body":"{\'side\':\'LEFT\',\'cityId\':' + cityIdTwo + '}"}';
+    if (armyNo == 1) {
+      httpPostString( chooseSideStringOne, url, sendTroopFuncOne);  
+    }
+    if (armyNo == 2) {
+      httpPostString( chooseSideStringTwo, url, sendTroopFuncTwo);  
+    }
+  }
 
-
-  var sendTroopsWithLittleGrass = function() {
+  var sendTroopsWithLittleGrassOne = function() {
     var cityOneSituationCMD = '{"act":"World.citySituationDetail","sid":"' + sid + '","body":"{\'cityId\':' + cityIdOne + '}"}';
     var cityTwoSituationCMD = '{"act":"World.citySituationDetail","sid":"' + sid + '","body":"{\'cityId\':' + cityIdTwo + '}"}';
+    
+    if (cityOneOcc == '' || cityTwoOcc == '') {
+        manorOff();
+    }
 
     var fieldDetectOne = function(responseText) {
       var serverInfo = JSON.parse(responseText);
       var d = new Date();
-      
-
       if (serverInfo.rAtt == 0 && d.getHours()>8 && d.getHours()<24){
         var ifMyTroopThereOne = function(responseText) {
           var serverResponse = JSON.parse(responseText);
@@ -384,31 +412,34 @@ var nwlDual = function(msgObj) {
           console.log(serverResponse)
           if (serverResponse.disp.myTroops && serverResponse.disp.myTroops == '') {
             if (cityOneOcc == '') {
-              setTimeout(manorOff,1000);  
-              setTimeout(sendTroopsAndMonorOn(1),11000);
-              console.log('city one send!')
+              setTimeout(function(){sendTroopsAndMonorOn(1)},10000);
+              console.log('city One send')
               cityOneOcc = 9;
-            }  else if (cityOneOcc>0 && cityOneOcc<=9) {
+            } else if (cityOneOcc>0 && cityOneOcc<=9) {
               cityOneOcc = cityOneOcc -1;
               console.log(cityOneOcc)
-            } else {  //else if (cityOneOcc == 0) 
+            } else { //else if (cityOneOcc == 0) 
               cityOneOcc = '';
-              console.log('Final!')
+              console.log('city One Final!')
             }
-              
           } else {
-            var leaveWarStringOne = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityIdOne + '}"}';
-            httpPostString( leaveWarStringOne, url, function(){});
+            var leaveWarString = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityIdOne + '}"}';
+            httpPostString( leaveWarString, url, function(){});
           }
         }
-      } else if (serverInfo.rAtt != 0) {
-            
-        console.log("已啟動, 但城市有玩家守軍");
-      } else {
-        console.log("已啟動, 9:00 ~ 23:00 將正常運作")
-      } 
-      var enterWarStringOne = '{"act":"NationalWar.enterWar","sid":"' + sid + '","body":"{\'cityId\':' + cityIdOne + '}"}';
-      httpPostString(enterWarStringOne,url,ifMyTroopThereOne)        
+        var enterWarStringOne = '{"act":"NationalWar.enterWar","sid":"' + sid + '","body":"{\'cityId\':' + cityIdOne + '}"}';
+        httpPostString(enterWarStringOne,url,ifMyTroopThereOne)        
+      }   
+    }
+
+    httpPostString(cityOneSituationCMD,url,fieldDetectOne)
+  }
+
+  var sendTroopsWithLittleGrassTwo = function() {
+    var cityTwoSituationCMD = '{"act":"World.citySituationDetail","sid":"' + sid + '","body":"{\'cityId\':' + cityIdTwo + '}"}';
+    
+    if (cityTwoOcc == '') {
+        manorOff();
     }
 
     var fieldDetectTwo = function(responseText) {
@@ -421,8 +452,7 @@ var nwlDual = function(msgObj) {
           console.log(serverResponse)
           if (serverResponse.disp.myTroops && serverResponse.disp.myTroops == '') {
             if (cityTwoOcc == '') {
-              setTimeout(manorOff,0);  
-              setTimeout(sendTroopsAndMonorOn(2),10000);
+              setTimeout(function(){sendTroopsAndMonorOn(2)},10000);
               console.log('city two send')
               cityTwoOcc = 9;
             } else if (cityTwoOcc>0 && cityTwoOcc<=9) {
@@ -432,9 +462,8 @@ var nwlDual = function(msgObj) {
               cityOneOcc = '';
               console.log('city Two Final!')
             }
-              
           } else {
-            var leaveWarString = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityIdOne + '}"}';
+            var leaveWarString = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityIdTwo + '}"}';
             httpPostString( leaveWarString, url, function(){});
           }
         }
@@ -442,49 +471,20 @@ var nwlDual = function(msgObj) {
         httpPostString(enterWarStringTwo,url,ifMyTroopThereTwo)        
       }   
     }
-    
-    var sendTroopsAndMonorOn = function(armyNo){
 
-
-      var ultimateCityTroopOne = '{"act":"NationalWar.sendTroops","sid":"' + sid + '","body":"{\'save\':'+ armyOne +',\'type\':\'NATIONAL_WAR\',\'cityId\':' + cityIdOne + '}"}';
-      var ultimateCityTroopTwo = '{"act":"NationalWar.sendTroops","sid":"' + sid + '","body":"{\'save\':'+ armyTwo +',\'type\':\'NATIONAL_WAR\',\'cityId\':' + cityIdTwo + '}"}';
-      var sendTroopFuncOne = function() {
-        var leaveWarOne = function() {
-          var leaveWarStringOne = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityIdOne + '}"}';
-          httpPostString( leaveWarStringOne, url, manorOn);
-        }
-        httpPostString( ultimateCityTroopOne, url, leaveWarOne);
-      }
-      var sendTroopFuncTwo = function() {
-        var leaveWarTwo = function() {
-          var leaveWarStringTwo = '{"act":"NationalWar.leaveWar","sid":"' + sid + '","body":"{\'cityId\':' + cityIdTwo + '}"}';
-          httpPostString( leaveWarStringTwo, url, manorOn);
-        }
-        httpPostString( ultimateCityTroopTwo, url, leaveWarTwo);
-      }
-      var chooseSideStringOne = '{"act":"NationalWar.chooseSide","sid":"' + sid + '","body":"{\'side\':\'LEFT\',\'cityId\':' + cityIdOne + '}"}';
-      var chooseSideStringTwo = '{"act":"NationalWar.chooseSide","sid":"' + sid + '","body":"{\'side\':\'LEFT\',\'cityId\':' + cityIdTwo + '}"}';
-      if (armyNo == 1) {
-        httpPostString( chooseSideStringOne, url, sendTroopFuncOne);  
-      }
-      if (armyNo == 2) {
-        httpPostString( chooseSideStringTwo, url, sendTroopFuncTwo);  
-      }
-    }
-    httpPostString(cityOneSituationCMD,url,fieldDetectOne)
     httpPostString(cityTwoSituationCMD,url,fieldDetectTwo)
-  }
-
-
+  }  
   
   
   if (msgObj.nwlDualCalledFlag ==1){
     console.log('開始刷城循環')
-    sendTroopsWithLittleGrass();
-    nwDualLoop[tabSwitcher] = setInterval(sendTroopsWithLittleGrass,waitTimeout);
+    sendTroopsWithLittleGrassOne();
+    nwDualLoopOne[tabSwitcher] = setInterval(sendTroopsWithLittleGrassOne,waitTimeout);
+    setTimeout(function(){sendTroopsWithLittleGrassTwo();nwDualLoopTwo[tabSwitcher] = setInterval(sendTroopsWithLittleGrassTwo,waitTimeout);},10000);
   } else {
     console.log('結束刷城循環')
-    clearInterval(nwDualLoop[tabSwitcher]);
+    clearInterval(nwDualLoopOne[tabSwitcher]);
+    clearInterval(nwDualLoopTwo[tabSwitcher]);
   }
 }
 
