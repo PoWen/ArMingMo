@@ -454,12 +454,12 @@ var oneArchery = function() {
       }
       var archeryInfo = JSON.parse(responseText);
       var nextShootX = Math.round(archeryInfo.wind*-2/30);
-      var nextShootCMD = '{"act":"Archery.shoot","sid":"' + sid + '","body":"{\'x\':' + nextShootX + ',\'y\':10,\'type\':\'ONEYEAY\'}"}'; //NORMAL
+      var nextShootCMD = '{"act":"Archery.shoot","sid":"' + sid + '","body":"{\'x\':' + nextShootX + ',\'y\':10,\'type\':\'NORMAL\'}"}'; //NORMAL
       httpPostString(nextShootCMD,url,showScore);
     }
     var sid = tabStatus[tabSwitcher].sid;
     var url = tabStatus[tabSwitcher].url;
-    var getArcheryInfo = '{"act":"Archery.getArcheryInfo","sid":"' + sid + '","body":"{\'type\':\'ONEYEAY\'}"}';//NORMAL
+    var getArcheryInfo = '{"act":"Archery.getArcheryInfo","sid":"' + sid + '","body":"{\'type\':\'NORMAL\'}"}';//NORMAL
     httpPostString(getArcheryInfo,url,doShoot);
   } else {
     renderStatus('請點擊主公頭像');
