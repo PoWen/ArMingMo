@@ -86,7 +86,8 @@ var msgToBackground = (localStorage.msgToBackground) ?
                         },
                         tabId: '',
                         msg: '',
-                        nwlClick: 0
+                        nwlClick: 0,
+                        nwlDualClick: 0
                       };
 
 
@@ -107,8 +108,12 @@ JSON.parse(localStorage.getItem("tabStatus")) :
   url: '',
   bossWarTimerCalledFlag: 0, // 0:not called, 1: called bossWar
   nwlCalledFlag: 0, // 0: not called, 1: call national war loop
+  nwlDualCalledFlag: 0,
   nwlCityId: '',
+  nwlCityIdOne: '',
+  nwlCityIdTwo: '',
   nwlClick: 0,
+  nwlDualClick: 0,
   nwlTimeout: 860,
   password: ''
 }];
@@ -828,6 +833,58 @@ var yourStar = function() {
   httpPostString(playerDetectStr, tabStatus[tabSwitcher].url, playerResponseInfo)   
 }
 
+var getPKTroop = function() {
+  var sid = tabStatus[tabSwitcher].sid;
+  var url = tabStatus[tabSwitcher].url;
+  var getPKTroops = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'PK\'}"}';
+  var renderTroops = function(responseText) {
+    var serverInfo = JSON.parse(responseText);
+    var heroInfo = JSON.stringify(serverInfo.heros);
+    var heroInfo = heroInfo.split("\"").join("\'");
+    var chief = serverInfo.chief;
+    var troopCode = '{\'heros\':' + heroInfo + ',\'chief\':' + chief + '}';
+    console.log(troopCode);
+    renderArmy(troopCode);
+  }
+  httpPostString(getPKTroops , url, renderTroops);
+  
+  
+}
+
+var nwlDualCity = function() {
+    if (tabStatus[tabSwitcher].nwlDualCalledFlag == 0) {
+      // change nwl Status
+      tabStatus[tabSwitcher].nwlDualCalledFlag = 1;
+      tabStatus[tabSwitcher].nwlCityIdOne = document.getElementById("dual-city-one").value;
+      tabStatus[tabSwitcher].nwlCityIdTwo = document.getElementById("dual-city-two").value;
+      tabStatus[tabSwitcher].nwlArmyOne = document.getElementById("dual-army-one").value;
+      tabStatus[tabSwitcher].nwlArmyTwo = document.getElementById("dual-army-two").value;
+      tabStatus[tabSwitcher].nwlTimeout = 20;
+      // post the timer trigger of bossWar to background
+      var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
+      localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+      tabStatus[tabSwitcher].nwlDualClick = 1;
+      postToBg(JSONstr);  
+      document.getElementById("nwl-dual-city").title = '您累了嗎? 無米不樂嗎? 停止刷城';
+      document.getElementById("nwl-dual-city").style['background-image'] = "url('nwl-single-city-off.gif')";
+      renderStatus('刷刷刷~~ 刷到天荒地老');
+
+    } else if (tabStatus[tabSwitcher].nwlDualCalledFlag == 1) {
+      // change nwl Status
+      tabStatus[tabSwitcher].nwlDualCalledFlag = 0;
+      // tabStatus[tabSwitcher].nwlCityId = document.getElementById("nwl-city-id").value;
+
+      var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
+      localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+      tabStatus[tabSwitcher].nwlDualClick = 1;
+      postToBg(JSONstr);  
+      
+      document.getElementById("nwl-dual-city").title = '挑戰呶大一次後設定好 PK 部隊後, 抓取 PK 部隊資訊。部隊資訊顯示於上方訊息框, 請自行複製貼到雙城奇謀部隊設定欄位';
+      document.getElementById("nwl-dual-city").style['background-image'] = "url('nwl-single-city.png')";
+      renderStatus('停止刷城, 整裝待發!')
+    }  
+}
+
 //"{"act":"StarGazing.myFirecrackerInfo","sid":"f707ca4616d8ec06b5308e2b231fc12166420962"}"
 // {"act":"StarGazing.hisFirecrackerInfo","sid":"0bc9d65f55237611df38489cd51fe154a8aa38e8","body":"{\"id\":\"343399815184384700\"}"}
 // {"act":"StarGazing.litOne","sid":"0bc9d65f55237611df38489cd51fe154a8aa38e8","body":"{\"id\":\"343399815184384699\"}"}
@@ -837,6 +894,10 @@ var yourStar = function() {
 // # View render --------------------------------------------------------------------
 function renderStatus(statusText) {
   document.getElementById('status').textContent = statusText + '\n' + document.getElementById('status').textContent;
+}
+
+function renderArmy(statusText) {
+  document.getElementById('army').textContent = statusText ;
 }
 
 function renderDiv(divName,divText) {
@@ -898,8 +959,14 @@ document.addEventListener('DOMContentLoaded', function() {
       tabStatus[tabSwitcher].manorString = '7,6,1,5,2,12,9,8';
       tabStatus[tabSwitcher].manorStatus = 1;// 0: manor off, 1: manor on
       tabStatus[tabSwitcher].nwlCalledFlag = 0; // 0: not called, 1: call national war loop
+      tabStatus[tabSwitcher].nwlDualCalledFlag = 0; // 0: not called, 1: call national war loop
       tabStatus[tabSwitcher].nwlCityId = '';
+      tabStatus[tabSwitcher].nwlCityIdOne = '';
+      tabStatus[tabSwitcher].nwlCityIdTwo = '';
+      tabStatus[tabSwitcher].nwlArmyOne = '';
+      tabStatus[tabSwitcher].nwlArmyTwo = '';
       tabStatus[tabSwitcher].nwlClick = 0;
+      tabStatus[tabSwitcher].nwlDualClick = 0;
       tabStatus[tabSwitcher].password = '';
     }
 
@@ -944,6 +1011,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('star-three').addEventListener('click', starThree); // Star five
   document.getElementById('my-star').addEventListener('click', myStar); // Star five
   document.getElementById('your-star').addEventListener('click', yourStar); // Star five
-  
+  document.getElementById('get-PK-troop').addEventListener('click', getPKTroop); // Get PK troops
+  document.getElementById('nwl-dual-city').addEventListener('click', nwlDualCity); // Dual city loop
 
 });
