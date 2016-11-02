@@ -49,6 +49,7 @@ Temporary Items
 # Chrome extension package
 *.crx
 *.pem
+ArMingMo.zip
 
 # sublime workspace
 *.sublime-project
