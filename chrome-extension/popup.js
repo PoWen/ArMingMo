@@ -192,7 +192,7 @@ var manorResponseInfo = function(responseText) {
 var manorOff = function() {
   var url = tabStatus[tabSwitcher].url;
   var retireString = function(decId) {
-    strReturn = '{"act":"Manor.retireAll","sid":"' 
+    strReturn = '{"act":"Manor.retireAllA","sid":"' 
                 + tabStatus[tabSwitcher].sid
                 +'","body":"{\'decId\':'
                 + decId
@@ -211,7 +211,7 @@ var manorOff = function() {
 var manorOn = function() {
   var url = tabStatus[tabSwitcher].url;
   var autoAppointString = function(decId) {
-    strReturn = '{"act":"Manor.autoAppoint","sid":"' 
+    strReturn = '{"act":"Manor.autoAppointA","sid":"' 
                 + tabStatus[tabSwitcher].sid
                 +'","body":"{\'decId\':'
                 + decId
@@ -398,6 +398,33 @@ var roulette = function() {
     var url = tabStatus[tabSwitcher].url;
     var drawLottery = '{"act":"Lottery.drawLottery","sid":"' + sid + '"}';
     var refreshLottery = '{"act":"Lottery.refreshLottery","sid":"' + sid + '"}';
+    httpPostString(drawLottery, url, rouletteCheck)
+  } else {
+    renderStatus('請點擊主公頭像');
+  }
+}
+
+var xmas = function() {
+  var xmasPres = document.getElementById("xmasPres").value;
+  if(tabStatus[tabSwitcher].sid) {
+    var rouletteCheck = function(responseText) {
+      var rouletteResponse = JSON.parse(responseText);
+      console.log(rouletteResponse);
+      if (rouletteResponse.ok){
+        httpPostString(drawLottery, url, rouletteCheck);
+        renderStatus('領獎!'); 
+      }
+      // else if (rouletteResponse.freeLotteryTimes > 1){
+      //   spinTimes = rouletteResponse.freeLotteryTimes;
+      //   renderStatus("剩餘免費次數:" + spinTimes + '\n'); 
+      //   httpPostString(drawLottery, url, rouletteCheck);
+      // }
+      else renderStatus("剩下最後一轉，請轉一下確認拿到多少鐵!")
+    }
+    var sid = tabStatus[tabSwitcher].sid;
+    var url = tabStatus[tabSwitcher].url;
+    //var drawLottery = '{"act":"Lottery.drawLottery","sid":"' + sid + '"}';
+    var drawLottery = '{"act":"JifenShop.buyFixItem","sid":"' + sid + '","body":"{\'id\':' + xmasPres + '}"}';
     httpPostString(drawLottery, url, rouletteCheck)
   } else {
     renderStatus('請點擊主公頭像');
@@ -1003,6 +1030,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('player-detect').addEventListener('click', playerDetect); // player detect
   document.getElementById('manor-detect').addEventListener('click', manorDetect); // Detect the earned manor
   document.getElementById('roulette').addEventListener('click', roulette); // Roulette
+  document.getElementById('xmas').addEventListener('click', xmas); // Xmax
   document.getElementById('grass-man').addEventListener('click', grassMan); // Earn money from grass-man
   document.getElementById('boss-war').addEventListener('click', bossWar); // Boss-war
   document.getElementById('one-archery').addEventListener('click', oneArchery); // Archery
