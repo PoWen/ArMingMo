@@ -63,14 +63,12 @@
       上軍府順序: <input id="seq-of-manor-on" type="text" value="" /><br>
       <div style="font-size: 70%; white-space:pre-wrap;">共 8 個數字，以逗點隔開無空格,1:馬 2:步兵 5:遠程 6:近戰 7:男 8:女 9:兵 12:防</div>
 
-      <button id="xmas"  style="width:39px;height:39px;background-image:url('manorSwitch.png');" title="聖誕快樂大放送"></button>聖誕老仙!!<br>
-      聖誕許願池: <input id="xmasPres" type="text" value="" /><br>
-      <div style="font-size: 70%; white-space:pre-wrap;">神秘數字, 1:華陀 2: 于吉 3:左慈 9:馬岱 10:金券</div>
+      <button id="xmas"  style="width:39px;height:39px;background-image:url('finger.png');" title="閱歷商店幫你連點拿獎勵, 離開阿明謀就會停止了...神秘數字只能輸入一個, 你輸入87也不會給你洪金寶的, 87分不能再高了..."></button>手指救星<br>
+      <!-- 聖誕許願池: <input id="xmasPres" type="text" value="" /><br> -->
+      <!-- <div style="font-size: 70%; white-space:pre-wrap;">神秘數字, 1:華陀 2: 于吉 3:左慈 9:馬岱 10:金券</div> -->
+      神秘數字: <input id="xmasPres" type="text" value="" /><br>
+      <div style="font-size: 70%; white-space:pre-wrap;">神秘數字, 1:精鐵 2: 銀兩 3:白寶 4:綠寶 5:藍寶 6:紫寶 7:金寶 8:紅寶</div>
 
-
-      <button id="nwl-single-city"  style="width:39px;height:39px;background-image:url('nwl-single-city.png');" title="選定要刷的城市編號, 上下軍府連刷單一城市。刷城隊伍從武藝較量隊伍抓取，請到排行榜使用刷城隊伍找人較量。"></button><a href="https://goo.gl/QJDfMV" target="_blank" title="新開分頁看cityId">十月圍城</a><br>
-      目標城市: <input id="nwl-city-id" type="text" value="" style="width: 40px;" />
-      重複秒數: <input id="nwl-timeout" type="text" value="20" style="width: 40px;" />
       
       小<button id="multi-city-fire"  style="width:39px;height:39px;background-image:url('multi-city-fire.png');" title="選定要放兵的城市編號, 以逗點隔開, 將會一鍵對所有指定城市從大營最小戰力派兵一隊。隊伍過多按鈕偏移時, 請壓 tab 鍵。"></button>大<button id="multi-city-fire-big"  style="width:39px;height:39px;background-image:url('multi-city-fire.png');" title="選定要放兵的城市編號, 以逗點隔開, 將會一鍵對所有指定城市從大營最大戰力派兵一隊。隊伍過多按鈕偏移時, 請壓 tab 鍵。"></button><br><a href="https://goo.gl/QJDfMV" target="_blank" title="新開分頁看cityId">烽火連天</a>目標城市: <br>
       <input id="mcf-city-id" type="text" value="" />
@@ -83,15 +81,19 @@
       <button id="manor-detect"  style="width:39px;height:39px;background-image:url('ArMingEye.png');" title="戰場軍功探測器"></button>軍功之眼
       <button id="grass-man"  style="width:39px;height:39px;background-image:url('grass-man.png');" title="草船借箭 一鍵全兌換銀兩"></button>草人點金
       <button id="roulette" style="width:39px;height:39px;background-image:url('roulette.png');" title="一鍵轉完免費輪盤"></button>一鍵轉盤
-      <button id="one-archery" style="width:39px;height:39px;background-image:url('archery.png');" title="盲劍客按鈕版, 進到射箭場, 按鈕看阿明謀訊息, 結束再進出射箭場可看分數。由於系統亂數影響, 雞精商品不保證每箭10分, 請衡量自身風險接受程度。"></button>你好箭
+      <button id="one-archery" style="width:39px;height:39px;background-image:url('archery.png');" title="盲箭客雞年新春版, 為了跟猴年活動區分, 所以猴年的是A, 雞年是B。進到射箭場, 按鈕看阿明謀訊息, 結束後頁面要重整才可看分數。由於系統亂數影響, 雞精商品不保證每箭10分, 請衡量自身風險接受程度。"></button>雞拔毛箭B
+      <button id="my-star" style="width:39px;height:39px;background-image:url('my-star.png');" title="查詢我的觀星圖編號"></button>好溫星<br>
+      <button id="your-star" style="width:39px;height:39px;background-image:url('your-star.png');" title="輸入別人的觀星圖編號, 按下去直接拿走10金吧"></button>男人愛偷星
+      觀星圖編號: <br><input type="text" id="your-star-id" />
+      
+      
+    </div>    
+    <div id="hidden-area" style="visibility: hidden">
       <button id="star-detect" style="width:39px;height:39px;background-image:url('star-detect.png');" title="請進入戰場, 再次點擊速覽星, 獲取星星編號"></button>速覽星
       <button id="star-get" style="width:39px;height:39px;background-image:url('star-get.png');" title="吃星先點速覽星查編號。想吃幾次點幾下。錦囊:111050，絕戀:111110。"></button>吃星絕對
       星星編號: <input type="text" id="star-get-id" />
       <button id="star-three" style="width:39px;height:39px;background-image:url('star-three.png');" title="速覽星查完編號, 從指定編號往後掃蕩三星"></button>三星衝
       起始編號: <input type="text" id="star-three-start" />
-      <button id="my-star" style="width:39px;height:39px;background-image:url('my-star.png');" title="查詢我的觀星圖編號"></button>好溫星<br>
-      <button id="your-star" style="width:39px;height:39px;background-image:url('your-star.png');" title="輸入別人的觀星圖編號, 按下去直接拿走10金吧"></button>男人愛偷星
-      觀星圖編號: <br><input type="text" id="your-star-id" />
       <br>
       測試區
       <br>
@@ -104,9 +106,11 @@
       city2: <input id="dual-city-two" type="text" value="" style="width: 40px;" /> 
       army2: <textarea id="dual-army-two" value="" style="width:70px;"></textarea>
       <button id="nwl-dual-city"  style="width:39px;height:39px;background-image:url('nwl-single-city.png');" title="刷一城不夠, 你有沒有刷第二城?"></button><a href="https://goo.gl/QJDfMV" target="_blank" title="新開分頁看cityId">雙城奇謀</a><br>
+      <button id="nwl-single-city"  style="width:39px;height:39px;background-image:url('nwl-single-city.png');" title="選定要刷的城市編號, 上下軍府連刷單一城市。刷城隊伍從武藝較量隊伍抓取，請到排行榜使用刷城隊伍找人較量。"></button><a href="https://goo.gl/QJDfMV" target="_blank" title="新開分頁看cityId">十月圍城</a><br>
+      目標城市: <input id="nwl-city-id" type="text" value="" style="width: 40px;" />
+      重複秒數: <input id="nwl-timeout" type="text" value="20" style="width: 40px;" />
       
-    </div>    
-    <div id="hidden-area" style="visibility: hidden">
+	  <button id="one-archery" style="width:39px;height:39px;background-image:url('archery.png');" title="盲劍客按鈕版, 進到射箭場, 按鈕看阿明謀訊息, 結束再進出射箭場可看分數。由於系統亂數影響, 雞精商品不保證每箭10分, 請衡量自身風險接受程度。"></button>你好箭
       <button id="one-archery" style="width:39px;height:39px;background-image:url('archery.png');" title="端午節射箭特別版, 按了就吃入場券喔"></button>神來一箭
       <br>
       <button id="boss-war"  style="width:39px;height:39px;background-image:url('boss-war.png');" title="時間到自動派兵神將"></button>神將無雙<div id="boss-war-status">運轉狀態: 未啟動</div>

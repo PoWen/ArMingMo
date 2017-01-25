@@ -419,12 +419,13 @@ var xmas = function() {
       //   renderStatus("剩餘免費次數:" + spinTimes + '\n'); 
       //   httpPostString(drawLottery, url, rouletteCheck);
       // }
-      else renderStatus("剩下最後一轉，請轉一下確認拿到多少鐵!")
+      else renderStatus("閱歷已用盡, 請買新月曆!")
     }
     var sid = tabStatus[tabSwitcher].sid;
     var url = tabStatus[tabSwitcher].url;
-    //var drawLottery = '{"act":"Lottery.drawLottery","sid":"' + sid + '"}';
-    var drawLottery = '{"act":"JifenShop.buyFixItem","sid":"' + sid + '","body":"{\'id\':' + xmasPres + '}"}';
+    //var drawLottery = '{"act":"Lottery.drawLottery","sid":"' + sid + '"}'; // 鐵轉盤
+    // var drawLottery = '{"act":"JifenShop.buyFixItem","sid":"' + sid + '","body":"{\'id\':' + xmasPres + '}"}'; //聖誕出包
+    var drawLottery = '{"act":"Shop.buyUndergoShopItem","sid":"' + sid + '","body":"{\'shopId\':' + xmasPres + '}"}';
     httpPostString(drawLottery, url, rouletteCheck)
   } else {
     renderStatus('請點擊主公頭像');
@@ -486,12 +487,12 @@ var oneArchery = function() {
       }
       var archeryInfo = JSON.parse(responseText);
       var nextShootX = Math.round(archeryInfo.wind*-2/30);
-      var nextShootCMD = '{"act":"Archery.shoot","sid":"' + sid + '","body":"{\'x\':' + nextShootX + ',\'y\':10,\'type\':\'NORMAL\'}"}'; //NORMAL
+      var nextShootCMD = '{"act":"Archery.shoot","sid":"' + sid + '","body":"{\'x\':' + nextShootX + ',\'y\':10,\'type\':\'ONEYEAY\'}"}'; //NORMAL
       httpPostString(nextShootCMD,url,showScore);
     }
     var sid = tabStatus[tabSwitcher].sid;
     var url = tabStatus[tabSwitcher].url;
-    var getArcheryInfo = '{"act":"Archery.getArcheryInfo","sid":"' + sid + '","body":"{\'type\':\'NORMAL\'}"}';//NORMAL
+    var getArcheryInfo = '{"act":"Archery.getArcheryInfo","sid":"' + sid + '","body":"{\'type\':\'ONEYEAY\'}"}';//NORMAL
     httpPostString(getArcheryInfo,url,doShoot);
   } else {
     renderStatus('請點擊主公頭像');
