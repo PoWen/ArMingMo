@@ -108,6 +108,7 @@ JSON.parse(localStorage.getItem("tabStatus")) :
   url: '',
   bossWarTimerCalledFlag: 0, // 0:not called, 1: called bossWar
   nwlCalledFlag: 0, // 0: not called, 1: call national war loop
+  topPVPCalledFlag: 0, // 0: not called, 1: call national war loop
   nwlDualCalledFlag: 0,
   nwlCityId: '',
   nwlCityIdOne: '',
@@ -115,6 +116,7 @@ JSON.parse(localStorage.getItem("tabStatus")) :
   nwlClick: 0,
   nwlDualClick: 0,
   nwlTimeout: 860,
+  topPVPTimeout: 240,
   password: ''
 }];
 
@@ -250,7 +252,7 @@ var fakeAuth = function() {
 }
 
 var passwordCheck = function(password) {
-  return (password == "nowdahowbunbun") ? 1 : 0 
+  return (password == "9487945") ? 1 : 0 
 }
 
 // My first function for chrome extension: Check the ArMingMo status to open the whole popup
@@ -269,13 +271,20 @@ var myFirstExtFunc = function() {
       document.getElementById("manor-switch").title = '扮豬吃老虎 就愛下軍府';
       document.getElementById("manor-switch").style['background-image'] = "url('manorSwitch.png')";
     }
-    console.log('nwlFlag:' + tabStatus[tabSwitcher].nwlCalledFlag);
+    //console.log('nwlFlag:' + tabStatus[tabSwitcher].nwlCalledFlag);
     if(tabStatus[tabSwitcher].nwlCalledFlag == 0) {
       document.getElementById("nwl-single-city").title = '選定要刷的城市編號, 上下軍府連刷單一城市。刷城隊伍從武藝較量隊伍抓取，請到排行榜使用刷城隊伍找人較量。';
       document.getElementById("nwl-single-city").style['background-image'] = "url('nwl-single-city.png')";
     }  else {
       document.getElementById("nwl-single-city").title = '停止刷城, 整裝待發!';
       document.getElementById("nwl-single-city").style['background-image'] = "url('nwl-single-city-off.gif')";
+    }
+    if(tabStatus[tabSwitcher].topPVPCalledFlag == 0) {
+      document.getElementById("top-pvp").title = '選定要刷的城市編號, 上下軍府連刷單一城市。刷城隊伍從武藝較量隊伍抓取，請到排行榜使用刷城隊伍找人較量。';
+      document.getElementById("top-pvp").style['background-image'] = "url('nwl-single-city.png')";
+    }  else {
+      document.getElementById("top-pvp").title = '停止刷城, 整裝待發!';
+      document.getElementById("top-pvp").style['background-image'] = "url('nwl-single-city-off.gif')";
     }
   } else {
     renderStatus('請點擊主公頭像');
@@ -785,6 +794,40 @@ var nwlSingleCity = function() {
     }  
 }
 
+// 巔峰對決
+var topPVP = function() {
+    if (tabStatus[tabSwitcher].topPVPCalledFlag == 0) {
+      // change topPVP Status
+      tabStatus[tabSwitcher].topPVPCalledFlag = 1;
+      tabStatus[tabSwitcher].topPVPTimeout = 240;
+      tabStatus[tabSwitcher].troopOne = document.getElementById("pvp-army-one").value;
+      tabStatus[tabSwitcher].troopTwo = document.getElementById("pvp-army-two").value;
+      tabStatus[tabSwitcher].troopThree = document.getElementById("pvp-army-three").value;
+      // post the timer trigger of bossWar to background
+      var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
+      localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+      tabStatus[tabSwitcher].topPVPClick = 1;
+      postToBg(JSONstr);  
+      document.getElementById("top-pvp").title = '您瘋夠了嗎? 停止羊癲瘋';
+      document.getElementById("top-pvp").style['background-image'] = "url('nwl-single-city-off.gif')";
+      renderStatus('戰戰戰~~ 戰到天荒地老');
+
+    } else if (tabStatus[tabSwitcher].topPVPCalledFlag == 1) {
+      // change topPVP Status
+      tabStatus[tabSwitcher].topPVPCalledFlag = 0;
+      // tabStatus[tabSwitcher].topPVPCityId = document.getElementById("topPVP-city-id").value;
+
+      var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
+      localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+      tabStatus[tabSwitcher].topPVPClick = 1;
+      postToBg(JSONstr);  
+      
+      document.getElementById("top-pvp").title = '指派三個部隊(不指派的話應該會照順序隨便派), 點選羊癲瘋, 將會在指定的時間自動幫你刷巔峰對決。';
+      document.getElementById("top-pvp").style['background-image'] = "url('nwl-single-city.png')";
+      renderStatus('停止發瘋, 變身小綿羊!')
+    }  
+}
+
 var sendByPowerRange = function() {
   var sprCity = document.getElementById("spr-city-id").value;
   var sprUpperBoundary = document.getElementById("spr-ub").value;
@@ -987,6 +1030,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tabStatus[tabSwitcher].manorString = '7,6,1,5,2,12,9,8';
       tabStatus[tabSwitcher].manorStatus = 1;// 0: manor off, 1: manor on
       tabStatus[tabSwitcher].nwlCalledFlag = 0; // 0: not called, 1: call national war loop
+      tabStatus[tabSwitcher].topPVPCalledFlag = 0; // 0: not called, 1: call national war loop
       tabStatus[tabSwitcher].nwlDualCalledFlag = 0; // 0: not called, 1: call national war loop
       tabStatus[tabSwitcher].nwlCityId = '';
       tabStatus[tabSwitcher].nwlCityIdOne = '';
@@ -1042,5 +1086,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('your-star').addEventListener('click', yourStar); // Star five
   document.getElementById('get-PK-troop').addEventListener('click', getPKTroop); // Get PK troops
   document.getElementById('nwl-dual-city').addEventListener('click', nwlDualCity); // Dual city loop
+  document.getElementById('top-pvp').addEventListener('click', topPVP); // top pvp
 
 });

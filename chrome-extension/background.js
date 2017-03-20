@@ -306,6 +306,65 @@ var nwl = function(msgObj) {
   
 }
 
+var topPVPloop = [];
+var topPVP = function(msgObj) {
+  
+  console.log("topPVP called! Flag:" + msgObj.topPVPCalledFlag)
+  var sid = msgObj.sid;
+  var url = msgObj.url;
+  var troopOne = msgObj.troopOne;
+  var troopTwo = msgObj.troopTwo;
+  var troopThree = msgObj.troopThree;
+  
+  var troopCode;
+  var waitTimeout = Number(msgObj.topPVPTimeout)*1000;
+  
+  
+
+  var startMatch = function() {
+    //{"act":"Pvp.startMatch","sid":"f707ca4616d8ec06b5308e2b3260e7ca46eab142"}
+    var startMatchCMD = '{"act":"Pvp.startMatch","sid":"' + sid + '"}';
+    //httpPostString( startMatchCMD, url, function(){});
+    // {"act":"Pvp.fightFormation","sid":"f707ca4616d8ec06b5308e2b3260e7ca46eab142","body":"{\"chief\":32,\"heros\":[{\"x\":-2,\"y\":0,\"index\":32},{\"x\":-4,\"y\":0,\"index\":16},{\"x\":-6,\"y\":0,\"index\":33},{\"x\":-5,\"y\":-1,\"index\":54},{\"x\":-5,\"y\":1,\"index\":60}]}"}
+    var troopOneCMD = '{"act":"Pvp.fightFormation","sid":"' + sid + '","body":"'+ troopOne +'"}';
+    var troopTwoCMD = '{"act":"Pvp.fightFormation","sid":"' + sid + '","body":"'+ troopTwo +'"}';  
+    var troopThreeCMD = '{"act":"Pvp.fightFormation","sid":"' + sid + '","body":"'+ troopThree +'"}';
+    // {"act":"Login.loginFinish","sid":"f707ca4616d8ec06b5308e2b3260e7ca46eab142"}
+    var loginFinishCMD = '{"act":"Login.loginFinish","sid":"' + sid + '"}';
+    //{"act":"Campaign.quitCampaign","sid":"f707ca4616d8ec06b5308e2b3260e7ca46eab142"}:04:13:12 GMT
+    var quitCampaignCMD = '{"act":"Campaign.quitCampaign","sid":"' + sid + '"}';
+    setTimeout(function(){httpPostString( startMatchCMD, url, function(){});},0);
+    setTimeout(function(){httpPostString( troopOneCMD, url, function(){});},20000);
+    setTimeout(function(){httpPostString( loginFinishCMD, url, function(){});},80000);
+    setTimeout(function(){httpPostString( troopTwoCMD, url, function(){});},90000);
+    setTimeout(function(){httpPostString( loginFinishCMD, url, function(){});},150000);
+    setTimeout(function(){httpPostString( troopThreeCMD, url, function(){});},160000);
+    setTimeout(function(){httpPostString( quitCampaignCMD, url, function(){});},230000);
+
+
+  }
+
+  var openPanel = function() {
+    //{"act":"Pvp.openPanel","sid":"f707ca4616d8ec06b5308e2b3260e7ca46eab142"}
+    var d = new Date();
+    if (d.getHours() == 20||d.getHours() == 21||d.getHours() == 11||d.getHours() == 12) {
+      var openPanelCMD = '{"act":"Pvp.openPanel","sid":"' + sid + '"}';
+      httpPostString( openPanelCMD, url, startMatch);  
+    }
+    
+  }
+  
+  if (msgObj.topPVPCalledFlag ==1){
+    console.log('開始羊癲瘋')
+    openPanel();
+    topPVPloop[tabSwitcher] = setInterval(openPanel,waitTimeout);
+  } else {
+    console.log('變回小綿羊')
+    clearInterval(topPVPloop[tabSwitcher]);
+  }
+  
+}
+
 
 var cityOneOcc = '';
 var cityTwoOcc = '';
@@ -605,6 +664,9 @@ var popupPostTriggerFunc = function(msg) {
   }
   if (msgFromPopup.nwlClick) {
     nwl(msgFromPopup);
+  }
+  if (msgFromPopup.topPVPClick) {
+    topPVP(msgFromPopup);
   }
   if (msgFromPopup.nwlDualClick) {
     nwlDual(msgFromPopup);
