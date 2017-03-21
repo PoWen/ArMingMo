@@ -4,6 +4,7 @@
  *
  */
 
+var nickName = "";
 
 //
 var cityIdMap = {
@@ -89,6 +90,10 @@ var msgToBackground = (localStorage.msgToBackground) ?
                         nwlClick: 0,
                         nwlDualClick: 0
                       };
+
+var topPVPArmy = (localStorage.topPVPArmy) ? 
+                      JSON.parse(localStorage.getItem("topPVPArmy")) : 
+                      {};
 
 
 var tabObj = {};
@@ -803,6 +808,13 @@ var topPVP = function() {
       tabStatus[tabSwitcher].troopOne = document.getElementById("pvp-army-one").value;
       tabStatus[tabSwitcher].troopTwo = document.getElementById("pvp-army-two").value;
       tabStatus[tabSwitcher].troopThree = document.getElementById("pvp-army-three").value;
+      if(nickName){
+      	topPVPArmy[nickName] = {};
+      	topPVPArmy[nickName].army1 = document.getElementById("pvp-army-one").value;
+      	topPVPArmy[nickName].army2 = document.getElementById("pvp-army-two").value;
+      	topPVPArmy[nickName].army3 = document.getElementById("pvp-army-three").value;
+      	localStorage.setItem('topPVPArmy',JSON.stringify(topPVPArmy));
+      }
       // post the timer trigger of bossWar to background
       var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
       localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
@@ -861,6 +873,11 @@ var playerDetect = function() {
     var playerInfo = JSON.parse(responseText);
     if (playerInfo.nickName) {
       renderStatus('偵測到玩家:' + playerInfo.nickName);
+      nickName = playerInfo.nickName;
+      document.getElementById("pvp-army-one").value = (topPVPArmy[nickName])? topPVPArmy[nickName].army1 :"";
+      document.getElementById("pvp-army-two").value = (topPVPArmy[nickName])? topPVPArmy[nickName].army2 :"";
+      document.getElementById("pvp-army-three").value = (topPVPArmy[nickName])? topPVPArmy[nickName].army3 :"";
+
     } else {
       renderStatus('偵測不到任何玩家, 請看看你的背後...');
     }
