@@ -317,11 +317,25 @@ var topPVP = function(msgObj) {
   var troopThree = msgObj.troopThree;
   
   var troopCode;
-  var waitTimeout = Number(msgObj.topPVPTimeout)*1000;
-  
-  
+  var waitTimeout = Number(msgObj.topPVPTimeout)*1000; 
 
   var startMatch = function() {
+    //random proc.
+    var randomVar = Math.round(Math.random()*6-0.5);  
+  
+    if(randomVar==0){
+      [troopOne, troopTwo, troopThree] = [troopOne, troopTwo, troopThree];
+    } else if (randomVar==1) {
+      [troopOne, troopTwo, troopThree] = [troopOne, troopThree, troopTwo];
+    } else if (randomVar==2) {
+      [troopOne, troopTwo, troopThree] = [troopTwo, troopOne, troopThree];
+    } else if (randomVar==3) {
+      [troopOne, troopTwo, troopThree] = [troopTwo, troopThree, troopOne];
+    } else if (randomVar==4) {
+      [troopOne, troopTwo, troopThree] = [troopThree, troopOne, troopTwo];
+    } else if (randomVar==5) {
+      [troopOne, troopTwo, troopThree] = [troopThree, troopTwo, troopOne];
+    }
     //{"act":"Pvp.startMatch","sid":"f707ca4616d8ec06b5308e2b3260e7ca46eab142"}
     var startMatchCMD = '{"act":"Pvp.startMatch","sid":"' + sid + '"}';
     //httpPostString( startMatchCMD, url, function(){});
@@ -342,7 +356,22 @@ var topPVP = function(msgObj) {
     setTimeout(function(){httpPostString( quitCampaignCMD, url, function(){});},230000);
 
 
-  }
+  }//random proc.
+  var randomVar = Math.round(Math.random()*6-0.5);  
+  
+    if(randomVar==0){
+      [troopOne, troopTwo, troopThree] = [troopOne, troopTwo, troopThree];
+    } else if (randomVar==1) {
+      [troopOne, troopTwo, troopThree] = [troopOne, troopThree, troopTwo];
+    } else if (randomVar==2) {
+      [troopOne, troopTwo, troopThree] = [troopTwo, troopOne, troopThree];
+    } else if (randomVar==3) {
+      [troopOne, troopTwo, troopThree] = [troopTwo, troopThree, troopOne];
+    } else if (randomVar==4) {
+      [troopOne, troopTwo, troopThree] = [troopThree, troopOne, troopTwo];
+    } else if (randomVar==5) {
+      [troopOne, troopTwo, troopThree] = [troopThree, troopTwo, troopOne];
+    }
 
   var openPanel = function() {
     //{"act":"Pvp.openPanel","sid":"f707ca4616d8ec06b5308e2b3260e7ca46eab142"}
