@@ -16,4 +16,4 @@
 為遊戲輔助程式，不保證執行之順暢程度，並且使用輔助程式產生之後果由使用者自行承擔。
 
 ## 相關連結
-https://github.com/login/oauth/authorize
+https://github.com/login/oauth/authorize?client_id=2eeced312a699ad0b9ea
