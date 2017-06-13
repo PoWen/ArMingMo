@@ -95,6 +95,9 @@ var topPVPArmy = (localStorage.topPVPArmy) ?
                       JSON.parse(localStorage.getItem("topPVPArmy")) : 
                       {};
 
+var kingRoadArmy = (localStorage.kingRoadArmy) ? 
+                      JSON.parse(localStorage.getItem("kingRoadArmy")) : 
+                      {};
 
 var tabObj = {};
 
@@ -512,6 +515,55 @@ var oneArchery = function() {
     renderStatus('請點擊主公頭像');
   }
 }
+var buyArrow = function () {
+  var buyArrowCMD = '{"act":"Archery.buyArrow","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'type\':\'ONEYEAY\'}"}';//NORMAL
+  httpPostString(buyArrowCMD,tabStatus[tabSwitcher].url,getResponseInfo);
+  renderStatus('購買一支箭!');  
+}
+//{"act":"Archery.buyArrow","sid":"0bc9d65f55237611df38489cbbfa269719f6d9fd","body":"{\"type\":\"ONEYEAY\"}"}
+var oneArcheryReward = function() {
+  if(tabStatus[tabSwitcher].sid) {
+    var sid = tabStatus[tabSwitcher].sid;
+    var url = tabStatus[tabSwitcher].url;
+  
+
+    var getArcheryReward1 = '{"act":"Archery.getReward","sid":"' + sid + '","body":"{\'index\':' + 1+ ',\'type\':\'ONEYEAY\'}"}';//NORMAL
+    httpPostString(getArcheryReward1,url,getResponseInfo);
+    renderStatus('領獎1!');
+
+    var getArcheryReward2 = '{"act":"Archery.getReward","sid":"' + sid + '","body":"{\'index\':' + 2+ ',\'type\':\'ONEYEAY\'}"}';//NORMAL
+    
+    setTimeout(function(){
+      httpPostString(getArcheryReward2,url,getResponseInfo);
+      renderStatus('領獎2!');
+    },1000);
+    
+    var getArcheryReward3 = '{"act":"Archery.getReward","sid":"' + sid + '","body":"{\'index\':' + 3+ ',\'type\':\'ONEYEAY\'}"}';//NORMAL
+    
+    setTimeout(function(){
+      httpPostString(getArcheryReward3,url,getResponseInfo);
+      renderStatus('領獎3!');
+    },2000);
+
+    var getArcheryReward4 = '{"act":"Archery.getReward","sid":"' + sid + '","body":"{\'index\':' + 4+ ',\'type\':\'ONEYEAY\'}"}';//NORMAL
+    
+    setTimeout(function(){
+      httpPostString(getArcheryReward4,url,getResponseInfo);
+      renderStatus('領獎4!');
+    },3000);
+    
+  } else {
+    renderStatus('請點擊主公頭像');
+  }
+}
+
+var quitArchery = function () {
+  var quitArcheryCMD = '{"act":"OneYear.quitArchery","sid":"' + tabStatus[tabSwitcher].sid + '"}';//NORMAL
+  httpPostString(quitArcheryCMD,tabStatus[tabSwitcher].url,getResponseInfo);
+  renderStatus('射箭場結束!');  
+}
+//{"act":"OneYear.quitArchery","sid":"0bc9d65f55237611df38489cbbfa269719f6d9fd"}
+
 
 var starDetect = function() {
   if(!(tabStatus[tabSwitcher].starCampaignId)){
@@ -877,6 +929,7 @@ var playerDetect = function() {
       document.getElementById("pvp-army-one").value = (topPVPArmy[nickName])? topPVPArmy[nickName].army1 :"";
       document.getElementById("pvp-army-two").value = (topPVPArmy[nickName])? topPVPArmy[nickName].army2 :"";
       document.getElementById("pvp-army-three").value = (topPVPArmy[nickName])? topPVPArmy[nickName].army3 :"";
+      document.getElementById("king-road-army").value = (kingRoadArmy[nickName])? kingRoadArmy[nickName].army :"";
 
     } else {
       renderStatus('偵測不到任何玩家, 請看看你的背後...');
@@ -971,6 +1024,197 @@ var nwlDualCity = function() {
       document.getElementById("nwl-dual-city").style['background-image'] = "url('nwl-single-city.png')";
       renderStatus('停止刷城, 整裝待發!')
     }  
+}
+
+var kingRoadFightELSE = function () {
+  if(nickName){
+    kingRoadArmy[nickName] = {};
+    kingRoadArmy[nickName].army = document.getElementById("king-road-army").value;
+    localStorage.setItem('kingRoadArmy',JSON.stringify(kingRoadArmy));
+  }
+
+  renderStatus('開始王者之路!');
+  
+  var pastRank = 9;
+  var PKtimes = 0;
+
+  var loopPK = function(responseText){
+    var kingRoadInfoResponse = JSON.parse(responseText);
+    // pastRank = kingRoadInfoResponse.rankNum;
+    if (pastRank!=0) {
+      if(PKtimes==0) {
+        var checkme = 0;
+        for (var i=0;i<kingRoadInfoResponse.rankList.length;i++){
+          if(kingRoadInfoResponse.rankList[i].me==true){
+            pastRank = i;
+            checkme = 1;
+            console.log('past rank:',pastRank);
+
+            if(i>1){
+              if(kingRoadInfoResponse.rankList[i-2].playerInfo.npc==true) {fightThatEnermy(i-2)}
+              else if(kingRoadInfoResponse.rankList[i-1].playerInfo.npc==true) {fightThatEnermy(i-1)}
+              else {fightThatEnermy(i-2)} 
+            } else if(i ==1){
+              fightThatEnermy(i-1);
+            } // else end!
+              
+          }    
+        }
+        if (checkme==0) {
+          console.log('past rank: no rank(9)');
+          if(kingRoadInfoResponse.rankList[i-2].playerInfo.npc==true) {fightThatEnermy(i-2)}
+          else if(kingRoadInfoResponse.rankList[i-1].playerInfo.npc==true) {fightThatEnermy(i-1)}
+          else {fightThatEnermy(i-2)}
+        }
+
+      } else if(PKtimes==1) {
+        for (var i=0;i<kingRoadInfoResponse.rankList.length;i++){
+          if(kingRoadInfoResponse.rankList[i].me==true){
+            pastRank = i;
+            console.log('past rank:',pastRank);
+            if(i >=1){
+              fightThatEnermy(i-1) 
+            } 
+            // else end!
+          }
+        }
+      }
+    }
+    else {
+      if(PKtimes==0) {
+        if(kingRoadInfoResponse.rankList[7].playerInfo.npc==true) {fightThatEnermy(7)}
+        else if(kingRoadInfoResponse.rankList[8].playerInfo.npc==true) {fightThatEnermy(8)}
+        else {fightThatEnermy(7)}
+      } else if(PKtimes==1) {
+        fightThatEnermy(8) 
+      } 
+    }
+  }
+  
+  var nowEnermyIndex;
+  var fightThatEnermy = function (enermyIndex) {
+    nowEnermyIndex = enermyIndex;
+    var KRWchallengeEnermyCMD = '{"act":"KingRoad.challenge","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'index\':' + enermyIndex + '}"}';  
+    var KRWevaMatchFormationCMD = '{"act":"Campaign.getAttFormation","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'march\':\'CSKING_ROAD\'}"}';
+    var KRWNextEnermyCMD = '{"act":"Campaign.nextEnemies","sid":"' + tabStatus[tabSwitcher].sid + '"}';
+    var KRWsaveFormationCMD = '{"act":"Campaign.saveFormation","sid":"' + tabStatus[tabSwitcher].sid + '","body":"'+ kingRoadArmy[nickName].army +'"}';
+    var KRWfightNextCMD = '{"act":"Campaign.fightNext","sid":"' + tabStatus[tabSwitcher].sid + '"}';
+    var KRWquitCampaignCMD = '{"act":"Campaign.quitCampaign","sid":"' + tabStatus[tabSwitcher].sid + '"}';
+    var KRWevaMatchFormation = function () {
+      var KRWNextEnermy = function (){
+        var KRWsaveFormation = function () {
+          var KRWfightNext = function () {
+            var KRWquitCampaign = function () {
+              var KRWcheckEnd = function () {
+                var kingRoadCheckFunc = function(responseText) {
+                  var kingRoadInfoResponseFightEnd = JSON.parse(responseText);
+                  var nowRank;
+                    for (var i=0;i<kingRoadInfoResponseFightEnd.rankList.length;i++){
+                      if(kingRoadInfoResponseFightEnd.rankList[i].me==true){
+                        nowRank = i; // else end!
+                        console.log('now rank:',nowRank);
+                      }
+                    }
+
+                  if(nowEnermyIndex>1){
+                    if(pastRank==nowRank){
+                      PKtimes++;
+                      httpPostString(kingRoadInfoCMD,tabStatus[tabSwitcher].url,loopPK);
+                    }
+                    else{
+                      PKtimes = 0;
+                      httpPostString(kingRoadInfoCMD,tabStatus[tabSwitcher].url,loopPK);
+                      pastRank=nowRank;
+                    }
+                  } else if (nowEnermyIndex == 1){
+                    if(pastRank==nowRank){
+                      PKtimes++;
+                      httpPostString(kingRoadInfoCMD,tabStatus[tabSwitcher].url,loopPK);
+                    }
+                    else {
+                      httpPostString(kingRoadInfoCMD,tabStatus[tabSwitcher].url,loopPK);
+                      PKtimes = 0;
+                    }
+                  }
+                }
+                httpPostString(kingRoadInfoCMD,tabStatus[tabSwitcher].url,kingRoadCheckFunc);
+              }
+              var showRank = pastRank+1;
+              var randerStringKRD = '挑戰第'+ showRank +'名'
+              renderStatus(randerStringKRD);
+              setTimeout(function(){httpPostString(KRWquitCampaignCMD,tabStatus[tabSwitcher].url,KRWcheckEnd)},2000);
+              
+            }
+            httpPostString(KRWfightNextCMD,tabStatus[tabSwitcher].url,KRWquitCampaign);
+          }
+          httpPostString(KRWsaveFormationCMD,tabStatus[tabSwitcher].url,KRWfightNext);
+        }
+        httpPostString(KRWNextEnermyCMD,tabStatus[tabSwitcher].url,KRWsaveFormation);
+      }
+      httpPostString(KRWevaMatchFormationCMD,tabStatus[tabSwitcher].url,KRWNextEnermy);  
+    }
+    httpPostString(KRWchallengeEnermyCMD,tabStatus[tabSwitcher].url,KRWevaMatchFormation);  
+  }
+
+  var kingRoadInfoCMD = '{"act":"KingRoad.info","sid":"' + tabStatus[tabSwitcher].sid + '"}';
+  httpPostString(kingRoadInfoCMD,tabStatus[tabSwitcher].url,loopPK);
+}
+
+var kingRoadFightWEDSAT = function () {
+    if(nickName){
+      kingRoadArmy[nickName] = {};
+      kingRoadArmy[nickName].army = document.getElementById("king-road-army").value;
+      localStorage.setItem('kingRoadArmy',JSON.stringify(kingRoadArmy));
+    }
+      // post the timer trigger of bossWar to background
+
+    renderStatus('開始王者之路!');
+
+    var matchTimes = 0;
+    var maxMatchTimes = 5;
+    matchTimes ++;
+
+    var KRWchallengeEnermyCMD = '{"act":"KingRoad.seasonChallenge","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'index\':' + matchTimes + '}"}';  
+    var KRWevaMatchFormationCMD = '{"act":"Campaign.evalMarchFormation","sid":"' + tabStatus[tabSwitcher].sid + '","body":"'+ kingRoadArmy[nickName].army +'"}';
+    var KRWsaveFormationCMD = '{"act":"Campaign.saveFormation","sid":"' + tabStatus[tabSwitcher].sid + '","body":"'+ kingRoadArmy[nickName].army +'"}';
+    var KRWfightNextCMD = '{"act":"Campaign.fightNext","sid":"' + tabStatus[tabSwitcher].sid + '"}';
+    var KRWquitCampaignCMD = '{"act":"Campaign.quitCampaign","sid":"' + tabStatus[tabSwitcher].sid + '"}';
+    var KRWevaMatchFormation = function () {
+      var KRWsaveFormation = function () {
+        var KRWfightNext = function () {
+          var KRWquitCampaign = function () {
+            
+            var KRWcheckEnd = function () {
+              if(matchTimes<maxMatchTimes) {
+                matchTimes++;
+                KRWchallengeEnermyCMD = '{"act":"KingRoad.seasonChallenge","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'index\':' + matchTimes + '}"}';  
+                httpPostString(KRWchallengeEnermyCMD,tabStatus[tabSwitcher].url,KRWevaMatchFormation);
+              } else {
+                for (j=3;j<=15;j++){
+                  var KRWrewardCMD = '{"act":"KingRoad.drawSeasonChallenge","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'star\':' + j + '}"}';  
+                 
+                  var KRWrewardRender = function (responseText) {
+                      var KRWrewardResponse = JSON.parse(responseText);
+                        if (KRWrewardResponse.ok){
+                          renderStatus('取得獎勵寶箱'); 
+                        }
+                  }
+                  httpPostString(KRWrewardCMD,tabStatus[tabSwitcher].url,KRWrewardRender)
+                }
+              }
+            }
+
+            renderStatus('完成第 ' + matchTimes + '場');
+            setTimeout(function(){httpPostString(KRWquitCampaignCMD,tabStatus[tabSwitcher].url,KRWcheckEnd);},2000);
+            
+          }
+          httpPostString(KRWfightNextCMD,tabStatus[tabSwitcher].url,KRWquitCampaign);
+        }
+        httpPostString(KRWsaveFormationCMD,tabStatus[tabSwitcher].url,KRWfightNext);
+      }
+      httpPostString(KRWevaMatchFormationCMD,tabStatus[tabSwitcher].url,KRWsaveFormation);
+    }
+    httpPostString(KRWchallengeEnermyCMD,tabStatus[tabSwitcher].url,KRWevaMatchFormation);
 }
 
 //"{"act":"StarGazing.myFirecrackerInfo","sid":"f707ca4616d8ec06b5308e2b231fc12166420962"}"
@@ -1096,6 +1340,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('grass-man').addEventListener('click', grassMan); // Earn money from grass-man
   document.getElementById('boss-war').addEventListener('click', bossWar); // Boss-war
   document.getElementById('one-archery').addEventListener('click', oneArchery); // Archery
+  document.getElementById('one-archery-buy').addEventListener('click', buyArrow); // buy Arrow
+  document.getElementById('one-archery-reward').addEventListener('click', oneArcheryReward); // Archery reward
+  document.getElementById('one-archery-quit').addEventListener('click', quitArchery); // Archery quit
   document.getElementById('star-detect').addEventListener('click', starDetect); // Star detect
   document.getElementById('star-get').addEventListener('click', starGet); // Star get
   document.getElementById('star-three').addEventListener('click', starThree); // Star five
@@ -1104,5 +1351,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('get-PK-troop').addEventListener('click', getPKTroop); // Get PK troops
   document.getElementById('nwl-dual-city').addEventListener('click', nwlDualCity); // Dual city loop
   document.getElementById('top-pvp').addEventListener('click', topPVP); // top pvp
+  document.getElementById('king-road-fight-WED-SAT').addEventListener('click', kingRoadFightWEDSAT); // "king-road-fight-WED-SAT"
+  document.getElementById('king-road-fight-ELSE').addEventListener('click', kingRoadFightELSE);// king-road-fight-ELSE
 
 });
