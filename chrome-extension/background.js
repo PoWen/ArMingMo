@@ -394,6 +394,58 @@ var topPVP = function(msgObj) {
   
 }
 
+var godCrossloop = [];
+var godCross = function(msgObj) {
+  
+  console.log("godCross called! Flag:" + msgObj.godCrossCalledFlag)
+  var sid = msgObj.sid;
+  var url = msgObj.url;
+  var godCrossArmy = msgObj.godCrossArmy;
+  
+  var troopCode;
+  var waitTimeout = Number(msgObj.godCrossTimeout)*1000; 
+
+  var godCrossMatch = function() {
+    var startGodCrossMatchCMD = '{"act":"Campaign.getAttFormation","sid":"' + sid + '","body":"{\'march\':\'GODHERO_CROSS\'}"}';
+    var godCrossNextEnemiesCMD = '{"act":"Campaign.nextEnemies","sid":"' + sid + '"}';
+    var godCrossEvalCMD = '{"act":"Campaign.evalMarchFormation","sid":"' + sid + '","body":"'+ godCrossArmy +'"}';
+    var godCrossSaveCMD = '{"act":"Campaign.saveFormation","sid":"' + sid + '","body":"'+ godCrossArmy +'"}';  
+    var godCrossFightNextCMD = '{"act":"Campaign.fightNext","sid":"' + sid + '"}';
+
+    var godCrossNextEnemies = function() {
+      var godCrossEval = function() {
+        var godCrossSave = function() {
+          var godCrossFightNext = function() {
+            httpPostString( godCrossFightNextCMD, url, responseInfo);
+          }
+          httpPostString( godCrossSaveCMD, url, godCrossFightNext);
+        }
+        httpPostString( godCrossEvalCMD, url, godCrossSave);
+      }
+      httpPostString( godCrossNextEnemiesCMD, url, godCrossEval);
+    }
+    httpPostString( startGodCrossMatchCMD, url, godCrossNextEnemies);  
+  }
+  var openGodCross = function() {
+    
+    var d = new Date();
+    if (d.getHours() != 20&&d.getHours() != 21&&d.getHours() != 11&&d.getHours() != 12&&d.getHours() >= 6&&d.getHours() < 23) {
+      var openGodCrossCMD = '{"act":"GodCross.fight","sid":"' + sid + '"}';
+      httpPostString( openGodCrossCMD, url, godCrossMatch);  
+    }
+    
+  }
+  
+  if (msgObj.godCrossCalledFlag ==1){
+    console.log('開始劍指')
+    openGodCross();
+    topPVPloop[tabSwitcher] = setInterval(openGodCross,waitTimeout);
+  } else {
+    console.log('停止劍指')
+    clearInterval(godCrossloop[tabSwitcher]);
+  }
+  
+}
 
 var cityOneOcc = '';
 var cityTwoOcc = '';
@@ -696,6 +748,9 @@ var popupPostTriggerFunc = function(msg) {
   }
   if (msgFromPopup.topPVPClick) {
     topPVP(msgFromPopup);
+  }
+  if (msgFromPopup.godCrossClick) {
+    godCross(msgFromPopup);
   }
   if (msgFromPopup.nwlDualClick) {
     nwlDual(msgFromPopup);

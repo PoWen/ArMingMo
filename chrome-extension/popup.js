@@ -94,6 +94,9 @@ var msgToBackground = (localStorage.msgToBackground) ?
 var topPVPArmy = (localStorage.topPVPArmy) ? 
                       JSON.parse(localStorage.getItem("topPVPArmy")) : 
                       {};
+var godCrossArmy = (localStorage.godCrossArmy) ? 
+                      JSON.parse(localStorage.getItem("godCrossArmy")) : 
+                      {};
 
 var kingRoadArmy = (localStorage.kingRoadArmy) ? 
                       JSON.parse(localStorage.getItem("kingRoadArmy")) : 
@@ -125,7 +128,9 @@ JSON.parse(localStorage.getItem("tabStatus")) :
   nwlDualClick: 0,
   nwlTimeout: 860,
   topPVPTimeout: 240,
-  password: ''
+  password: '',
+  godCrossCalledFlag: 0,
+  godCrossTimeout: 180
 }];
 
 
@@ -293,6 +298,13 @@ var myFirstExtFunc = function() {
     }  else {
       document.getElementById("top-pvp").title = '停止刷城, 整裝待發!';
       document.getElementById("top-pvp").style['background-image'] = "url('nwl-single-city-off.gif')";
+    }
+    if(tabStatus[tabSwitcher].godCrossCalledFlag == 0) {
+      document.getElementById("god-cross").title = '選定要刷的城市編號, 上下軍府連刷單一城市。刷城隊伍從武藝較量隊伍抓取，請到排行榜使用刷城隊伍找人較量。';
+      document.getElementById("god-cross").style['background-image'] = "url('nwl-single-city.png')";
+    }  else {
+      document.getElementById("god-cross").title = '停止刷城, 整裝待發!';
+      document.getElementById("god-cross").style['background-image'] = "url('nwl-single-city-off.gif')";
     }
   } else {
     renderStatus('請點擊主公頭像');
@@ -892,6 +904,44 @@ var topPVP = function() {
     }  
 }
 
+// 劍指天下
+var godCross = function() {
+    if (tabStatus[tabSwitcher].godCrossCalledFlag == 0) {
+      // change topPVP Status
+      tabStatus[tabSwitcher].godCrossCalledFlag = 1;
+      tabStatus[tabSwitcher].godCrossTimeout = 180;
+      tabStatus[tabSwitcher].godCrossArmy = document.getElementById("god-cross-army").value;
+      
+      if(nickName){
+        godCrossArmy[nickName] = {};
+        godCrossArmy[nickName].godCrossArmy = document.getElementById("god-cross-army").value;
+        localStorage.setItem('godCrossArmy',JSON.stringify(godCrossArmy));
+      }
+      // post the timer trigger of bossWar to background
+      var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
+      localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+      tabStatus[tabSwitcher].godCrossClick = 1;
+      postToBg(JSONstr);  
+      document.getElementById("god-cross").title = '停止劍指天下';
+      document.getElementById("god-cross").style['background-image'] = "url('nwl-single-city-off.gif')";
+      renderStatus('戰劍指~~ 戰到天荒地老');
+
+    } else if (tabStatus[tabSwitcher].godCrossCalledFlag == 1) {
+      // change topPVP Status
+      tabStatus[tabSwitcher].godCrossCalledFlag = 0;
+      // tabStatus[tabSwitcher].topPVPCityId = document.getElementById("topPVP-city-id").value;
+
+      var JSONstr = JSON.stringify(tabStatus[tabSwitcher]);
+      localStorage.setItem('tabStatus',JSON.stringify(tabStatus));
+      tabStatus[tabSwitcher].godCrossClick = 1;
+      postToBg(JSONstr);  
+      
+      document.getElementById("god-cross").title = '指派劍指天下部隊, 將會在指定的時間自動幫你刷劍指天下。';
+      document.getElementById("god-cross").style['background-image'] = "url('nwl-single-city.png')";
+      renderStatus('停止劍指!')
+    }  
+}
+
 var sendByPowerRange = function() {
   var sprCity = document.getElementById("spr-city-id").value;
   var sprUpperBoundary = document.getElementById("spr-ub").value;
@@ -930,6 +980,7 @@ var playerDetect = function() {
       document.getElementById("pvp-army-two").value = (topPVPArmy[nickName])? topPVPArmy[nickName].army2 :"";
       document.getElementById("pvp-army-three").value = (topPVPArmy[nickName])? topPVPArmy[nickName].army3 :"";
       document.getElementById("king-road-army").value = (kingRoadArmy[nickName])? kingRoadArmy[nickName].army :"";
+      document.getElementById("god-cross-army").value = (godCrossArmy[nickName])? godCrossArmy[nickName].godCrossArmy :"";
 
     } else {
       renderStatus('偵測不到任何玩家, 請看看你的背後...');
@@ -1292,6 +1343,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tabStatus[tabSwitcher].manorStatus = 1;// 0: manor off, 1: manor on
       tabStatus[tabSwitcher].nwlCalledFlag = 0; // 0: not called, 1: call national war loop
       tabStatus[tabSwitcher].topPVPCalledFlag = 0; // 0: not called, 1: call national war loop
+      tabStatus[tabSwitcher].godCrossCalledFlag = 0; // 0: not called, 1: call national war loop
       tabStatus[tabSwitcher].nwlDualCalledFlag = 0; // 0: not called, 1: call national war loop
       tabStatus[tabSwitcher].nwlCityId = '';
       tabStatus[tabSwitcher].nwlCityIdOne = '';
@@ -1351,6 +1403,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('get-PK-troop').addEventListener('click', getPKTroop); // Get PK troops
   document.getElementById('nwl-dual-city').addEventListener('click', nwlDualCity); // Dual city loop
   document.getElementById('top-pvp').addEventListener('click', topPVP); // top pvp
+  document.getElementById('god-cross').addEventListener('click', godCross); // god cross
   document.getElementById('king-road-fight-WED-SAT').addEventListener('click', kingRoadFightWEDSAT); // "king-road-fight-WED-SAT"
   document.getElementById('king-road-fight-ELSE').addEventListener('click', kingRoadFightELSE);// king-road-fight-ELSE
 
