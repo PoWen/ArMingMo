@@ -156,7 +156,7 @@ var nwl = function(msgObj) {
   var cityId = msgObj.nwlCityId;
   var manorSeq = msgObj.manorString;
   var troopCode;
-  var waitTimeout = Number(msgObj.nwlTimeout)*1000;
+  var waitTimeout = Number(msgObj.nwlTimeout)*1000*13.5/14;
   var myName;
 
   // manor off, need sid 
@@ -429,9 +429,11 @@ var godCross = function(msgObj) {
   var openGodCross = function() {
     
     var d = new Date();
-    if (d.getHours() != 20&&d.getHours() != 21&&d.getHours() != 11&&d.getHours() != 12&&d.getHours() >= 6&&d.getHours() < 23) {
-      var openGodCrossCMD = '{"act":"GodCross.fight","sid":"' + sid + '"}';
-      httpPostString( openGodCrossCMD, url, godCrossMatch);  
+    if (d.getHours() >= 9&&d.getHours() < 23) {
+    	// if (d.getHours() != 20&&d.getHours() != 21&&d.getHours() != 11&&d.getHours() != 12) {
+    	  var openGodCrossCMD = '{"act":"GodCross.fight","sid":"' + sid + '"}';
+      	  httpPostString( openGodCrossCMD, url, godCrossMatch);  		
+    	// } 
     }
     
   }

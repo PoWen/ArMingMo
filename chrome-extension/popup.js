@@ -1268,6 +1268,24 @@ var kingRoadFightWEDSAT = function () {
     httpPostString(KRWchallengeEnermyCMD,tabStatus[tabSwitcher].url,KRWevaMatchFormation);
 }
 
+
+var luoYangReward = function () {
+  // {"act":"LuoYang.taskReward","sid":"c759076139fa3eea76dc033ae6fc46dcdde09fef","body":"{\"i\":1}"}:
+  var rewardNum = 1;
+  var luoYangRewardCMD = '{"act":"LuoYang.taskReward","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'i\':' + rewardNum + '}"}';  
+  var rewardNext = function (responseText) {
+    var LYrewardResponse = JSON.parse(responseText);
+    if (LYrewardResponse.ok){
+      var rewardStatusText = '取得獎勵寶箱' + rewardNum;
+      renderStatus(rewardStatusText); 
+      rewardNum ++;
+      var nextRewardCMD = '{"act":"LuoYang.taskReward","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'i\':' + rewardNum + '}"}';
+      httpPostString(nextRewardCMD,tabStatus[tabSwitcher].url,rewardNext)
+    }
+  }
+  httpPostString(luoYangRewardCMD,tabStatus[tabSwitcher].url,rewardNext)
+
+}
 //"{"act":"StarGazing.myFirecrackerInfo","sid":"f707ca4616d8ec06b5308e2b231fc12166420962"}"
 // {"act":"StarGazing.hisFirecrackerInfo","sid":"0bc9d65f55237611df38489cd51fe154a8aa38e8","body":"{\"id\":\"343399815184384700\"}"}
 // {"act":"StarGazing.litOne","sid":"0bc9d65f55237611df38489cd51fe154a8aa38e8","body":"{\"id\":\"343399815184384699\"}"}
@@ -1404,6 +1422,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('nwl-dual-city').addEventListener('click', nwlDualCity); // Dual city loop
   document.getElementById('top-pvp').addEventListener('click', topPVP); // top pvp
   document.getElementById('god-cross').addEventListener('click', godCross); // god cross
+  document.getElementById('luo-yang-reward').addEventListener('click', luoYangReward);// luo-yang-reward
   document.getElementById('king-road-fight-WED-SAT').addEventListener('click', kingRoadFightWEDSAT); // "king-road-fight-WED-SAT"
   document.getElementById('king-road-fight-ELSE').addEventListener('click', kingRoadFightELSE);// king-road-fight-ELSE
 
