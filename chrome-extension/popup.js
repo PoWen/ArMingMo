@@ -785,6 +785,72 @@ var starThree = function() {
 //   }
 // }
 
+var multiCityFireAdvSet = function() {
+  var mcfTimeout = document.getElementById("mcf-timeout").value;
+  mcfTimeout = mcfTimeout * 1000;
+  var mcfInterval = document.getElementById("mcf-interval").value;
+  mcfInterval = mcfInterval * 1000;
+  document.getElementById("mcf-timeout").disabled = true;
+  document.getElementById("multi-city-fire-adv").disabled = true;  
+  setTimeout(
+    function(){
+  	  setInterval(
+  	    function(){
+  	      var mcfAmount = document.getElementById("mcf-amount").value;
+  	      var sortType = document.getElementById("mcf-sort-type").value;
+  	      multiCityFireAdv(mcfAmount,sortType);
+        },
+      mcfInterval)
+    },
+  mcfTimeout)
+}
+
+var multiCityFireAdv = function(mcfAmount,sortType) {
+  var mcfCityArray = document.getElementById("mcf-city-id").value.split(',');
+  var getTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'city\':' + mcfCityArray[0] + '}"}'  
+
+  var sortAndSend = function(responseText) {
+    var corpsTroopsInfo = JSON.parse(responseText);
+    var byPower = corpsTroopsInfo.trps.slice(0);
+    // console.log(sortType)
+    if (sortType!='3'){
+      byPower.sort(function(a,b) {
+        return a.power - b.power;
+      });
+    }
+    
+
+    if (byPower.length <= mcfAmount) mcfAmount = byPower.length;
+
+
+    for (i=0; i<mcfCityArray.length; i++) {
+      var troopContent = '';
+      // console.log(mcfAmount)
+
+	  if (sortType != 1) {
+	    for (j=0; j<mcfAmount; j++){
+	      var comon = (j==0) ? '' : ',';
+          troopContent = troopContent + comon +'\'' + byPower[j].uid + '\'';
+	    }	
+	  } else {
+	  	for (j=0; j<mcfAmount; j++){
+          var bigTroopNum = byPower.length - i -j -1;
+	      var comon = (j==0) ? '' : ',';
+          troopContent = troopContent + comon +'\'' + byPower[bigTroopNum].uid + '\'';
+	    }
+	  }
+	  
+	  // console.log(troopContent)
+      var troopIdString = '\'trpIds\':[' + troopContent + '],';
+      var useReserveTroopsCMD = '{"act":"NationalWar.useReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{' + troopIdString + '\'city\':' + mcfCityArray[i] + '}"}';
+      statusString = '派兵:' + mcfCityArray[i];
+      renderStatus(statusString);
+      httpPostString(useReserveTroopsCMD,tabStatus[tabSwitcher].url,function(){renderStatus('已派兵');});
+    }
+  } 
+  httpPostString(getTroopsCMD,tabStatus[tabSwitcher].url,sortAndSend)
+}  
+
 var multiCityFire = function() {
   var mcfCityArray = document.getElementById("mcf-city-id").value.split(',');
   var getTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'city\':' + mcfCityArray[0] + '}"}'  
@@ -1425,5 +1491,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('luo-yang-reward').addEventListener('click', luoYangReward);// luo-yang-reward
   document.getElementById('king-road-fight-WED-SAT').addEventListener('click', kingRoadFightWEDSAT); // "king-road-fight-WED-SAT"
   document.getElementById('king-road-fight-ELSE').addEventListener('click', kingRoadFightELSE);// king-road-fight-ELSE
+  document.getElementById('multi-city-fire-adv').addEventListener('click', multiCityFireAdvSet);// 進階烽火連天
 
 });

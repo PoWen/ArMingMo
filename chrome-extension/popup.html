@@ -70,8 +70,27 @@
       <div style="font-size: 70%; white-space:pre-wrap;">神秘數字, 1:精鐵 2: 銀兩 3:白寶 4:綠寶 5:藍寶 6:紫寶 7:金寶 8:紅寶</div>
 
       
-      小<button id="multi-city-fire"  style="width:39px;height:39px;background-image:url('multi-city-fire.png');" title="選定要放兵的城市編號, 以逗點隔開, 將會一鍵對所有指定城市從大營最小戰力派兵一隊。隊伍過多按鈕偏移時, 請壓 tab 鍵。"></button>大<button id="multi-city-fire-big"  style="width:39px;height:39px;background-image:url('multi-city-fire.png');" title="選定要放兵的城市編號, 以逗點隔開, 將會一鍵對所有指定城市從大營最大戰力派兵一隊。隊伍過多按鈕偏移時, 請壓 tab 鍵。"></button><br><a href="https://goo.gl/QJDfMV" target="_blank" title="新開分頁看cityId">烽火連天</a>目標城市: <br>
+      小<button id="multi-city-fire"  style="width:39px;height:39px;background-image:url('multi-city-fire.png');" title="選定要放兵的城市編號, 以逗點隔開, 將會一鍵對所有指定城市從大營最小戰力派兵一隊。隊伍過多按鈕偏移時, 請壓 tab 鍵。"></button>大<button id="multi-city-fire-big"  style="width:39px;height:39px;background-image:url('multi-city-fire.png');" title="選定要放兵的城市編號, 以逗點隔開, 將會一鍵對所有指定城市從大營最大戰力派兵一隊。隊伍過多按鈕偏移時, 請壓 tab 鍵。"></button><br><a href="https://goo.gl/QJDfMV" target="_blank" title="新開分頁看cityId">烽火連天</a>
+      目標城市: <br>
       <input id="mcf-city-id" type="text" value="" />
+      <br>
+      進階烽火設定
+      <br>
+      <button id="multi-city-fire-adv"  style="width:39px;height:39px;background-image:url('multi-city-fire.png');" title="選定城市編號後，確認自動派兵設定(宣戰請自己宣，阿明只會派兵而已)，點擊按鈕即可。進階按鈕後按右鍵->檢查, 避免阿明謀視窗消失。派兵期間沒鎖住的欄位都可以自行更動，更動後即生效! 咭咭咭~~"></button>
+      <br>
+      幾秒後開始? <br>
+      <input id="mcf-timeout" type="text" value="1200" />
+      派兵秒距? <br>
+      <input id="mcf-interval" type="text" value="31" />
+      派兵隊數? <br>
+      <input id="mcf-amount" type="text" value="15" />
+      順序?
+      <select id="mcf-sort-type">
+        <option value="1">由大到小</option>
+        <option value="2">由小到大</option>
+        <option selected value="3">照大營順序</option>
+      </select>
+
       <br>
       <button id="send-by-power-range"  style="width:39px;height:39px;background-image:url('war-declare.png');" title="設定派兵戰力的上下限與目標城市, 阿明幫你一鍵派出。還有，想猜猜這個功能命名的梗嗎? 請投稿到阿明信箱, 謝謝~"></button><a href="https://goo.gl/QJDfMV" target="_blank" title="新開分頁看cityId">金剛戰士</a><br>
       目標城市: <input id="spr-city-id" type="text" value="" style="width: 40px;" />
