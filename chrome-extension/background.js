@@ -337,7 +337,8 @@ var topPVP = function(msgObj) {
       [troopOne, troopTwo, troopThree] = [troopThree, troopTwo, troopOne];
     }
     //{"act":"Pvp.startMatch","sid":"f707ca4616d8ec06b5308e2b3260e7ca46eab142"}
-    var startMatchCMD = '{"act":"Pvp.startMatch","sid":"' + sid + '"}';
+    // var startMatchCMD = '{"act":"Pvp.startMatch","sid":"' + sid + '"}';
+    var startMatchCMD = '{"act":"PvpQ.match","sid":"' + sid + '", "body":"{\'matchType\':\'Q\'}"}';  
     //httpPostString( startMatchCMD, url, function(){});
     // {"act":"Pvp.fightFormation","sid":"f707ca4616d8ec06b5308e2b3260e7ca46eab142","body":"{\"chief\":32,\"heros\":[{\"x\":-2,\"y\":0,\"index\":32},{\"x\":-4,\"y\":0,\"index\":16},{\"x\":-6,\"y\":0,\"index\":33},{\"x\":-5,\"y\":-1,\"index\":54},{\"x\":-5,\"y\":1,\"index\":60}]}"}
     var troopOneCMD = '{"act":"Pvp.fightFormation","sid":"' + sid + '","body":"'+ troopOne +'"}';
@@ -377,7 +378,8 @@ var topPVP = function(msgObj) {
     //{"act":"Pvp.openPanel","sid":"f707ca4616d8ec06b5308e2b3260e7ca46eab142"}
     var d = new Date();
     if (d.getHours() == 20||d.getHours() == 21||d.getHours() == 11||d.getHours() == 12) {
-      var openPanelCMD = '{"act":"Pvp.openPanel","sid":"' + sid + '"}';
+      // var openPanelCMD = '{"act":"Pvp.openPanel","sid":"' + sid + '"}';
+      var openPanelCMD = '{"act":"PvpQ.openPanel","sid":"' + sid + '"}';
       httpPostString( openPanelCMD, url, startMatch);  
     }
     
