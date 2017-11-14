@@ -852,49 +852,53 @@ var multiCityFireAdv = function(mcfAmount,sortType) {
 }  
 
 var multiCityFire = function() {
-  var mcfCityArray = document.getElementById("mcf-city-id").value.split(',');
-  var getTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'city\':' + mcfCityArray[0] + '}"}'  
+  var troopAmount = document.getElementById("mcf-city-manual-amount").value;
+  multiCityFireAdv(troopAmount,'1');
+  // var mcfCityArray = document.getElementById("mcf-city-id").value.split(',');
+  // var getTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'city\':' + mcfCityArray[0] + '}"}'  
 
-  var sortAndSend = function(responseText) {
-    var corpsTroopsInfo = JSON.parse(responseText);
-    var byPower = corpsTroopsInfo.trps.slice(0);
-    byPower.sort(function(a,b) {
-      return a.power - b.power;
-    });
+  // var sortAndSend = function(responseText) {
+  //   var corpsTroopsInfo = JSON.parse(responseText);
+  //   var byPower = corpsTroopsInfo.trps.slice(0);
+  //   byPower.sort(function(a,b) {
+  //     return a.power - b.power;
+  //   });
     
-    for (i=0; i<mcfCityArray.length; i++) {
-      var troopIdString = '\'trpIds\':[' + byPower[i].uid + '],';
-      var useReserveTroopsCMD = '{"act":"NationalWar.useReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{' + troopIdString + '\'city\':' + mcfCityArray[i] + '}"}';
-      statusString = '派兵:' + mcfCityArray[i];
-      renderStatus(statusString);
-      httpPostString(useReserveTroopsCMD,tabStatus[tabSwitcher].url,function(){renderStatus('已派兵');});
-    }
-  } 
-  httpPostString(getTroopsCMD,tabStatus[tabSwitcher].url,sortAndSend)
+  //   for (i=0; i<mcfCityArray.length; i++) {
+  //     var troopIdString = '\'trpIds\':[' + byPower[i].uid + '],';
+  //     var useReserveTroopsCMD = '{"act":"NationalWar.useReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{' + troopIdString + '\'city\':' + mcfCityArray[i] + '}"}';
+  //     statusString = '派兵:' + mcfCityArray[i];
+  //     renderStatus(statusString);
+  //     httpPostString(useReserveTroopsCMD,tabStatus[tabSwitcher].url,function(){renderStatus('已派兵');});
+  //   }
+  // } 
+  // httpPostString(getTroopsCMD,tabStatus[tabSwitcher].url,sortAndSend)
 }  
 
 var multiCityFireBig = function() {
-  var mcfCityArray = document.getElementById("mcf-city-id").value.split(',');
-  var getTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'city\':' + mcfCityArray[0] + '}"}'  
+  var troopAmount = document.getElementById("mcf-city-manual-amount").value;
+  multiCityFireAdv(troopAmount,'2');
+  // var mcfCityArray = document.getElementById("mcf-city-id").value.split(',');
+  // var getTroopsCMD = '{"act":"NationalWar.getCorpsReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{\'city\':' + mcfCityArray[0] + '}"}'  
 
-  var sortAndSend = function(responseText) {
-    var corpsTroopsInfo = JSON.parse(responseText);
-    var byPower = corpsTroopsInfo.trps.slice(0);
-    byPower.sort(function(a,b) {
-      return a.power - b.power;
-    });
+  // var sortAndSend = function(responseText) {
+  //   var corpsTroopsInfo = JSON.parse(responseText);
+  //   var byPower = corpsTroopsInfo.trps.slice(0);
+  //   byPower.sort(function(a,b) {
+  //     return a.power - b.power;
+  //   });
     
-    for (i=0; i<mcfCityArray.length; i++) {
-      var bigTroopNum = byPower.length - i -1;
-      console.log(bigTroopNum);
-      var troopIdString = '\'trpIds\':[' + byPower[bigTroopNum].uid + '],';
-      var useReserveTroopsCMD = '{"act":"NationalWar.useReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{' + troopIdString + '\'city\':' + mcfCityArray[i] + '}"}';
-      statusString = '派兵:' + mcfCityArray[i];
-      renderStatus(statusString);
-      httpPostString(useReserveTroopsCMD,tabStatus[tabSwitcher].url,function(){renderStatus('已派兵');});
-    }
-  } 
-  httpPostString(getTroopsCMD,tabStatus[tabSwitcher].url,sortAndSend)
+  //   for (i=0; i<mcfCityArray.length; i++) {
+  //     var bigTroopNum = byPower.length - i -1;
+  //     console.log(bigTroopNum);
+  //     var troopIdString = '\'trpIds\':[' + byPower[bigTroopNum].uid + '],';
+  //     var useReserveTroopsCMD = '{"act":"NationalWar.useReserveTroops","sid":"' + tabStatus[tabSwitcher].sid + '","body":"{' + troopIdString + '\'city\':' + mcfCityArray[i] + '}"}';
+  //     statusString = '派兵:' + mcfCityArray[i];
+  //     renderStatus(statusString);
+  //     httpPostString(useReserveTroopsCMD,tabStatus[tabSwitcher].url,function(){renderStatus('已派兵');});
+  //   }
+  // } 
+  // httpPostString(getTroopsCMD,tabStatus[tabSwitcher].url,sortAndSend)
 }  
   
 // 單城循環連刷
